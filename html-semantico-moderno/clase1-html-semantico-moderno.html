@@ -320,7 +320,7 @@
         Abrir en YouTube — Curso HTML desde cero (Midudev)
     </a>
 
-    <h2>6. Mini‑ejercicio (5 minutos)</h2>
+    <h2>6. Mini‑ejercicio (1 a 5 minutos)</h2>
     <p>Convierte este fragmento no semántico en uno semántico:</p>
 
     <pre>
@@ -332,8 +332,10 @@
 &lt;div class="bottom"&gt;Contacto&lt;/div&gt;
     </pre>
 
-    <p>Solución sugerida (haz clic para mostrar):</p>
-    <button onclick="document.getElementById('sol').style.display='block'">Mostrar solución</button>
+    <p>Solución sugerida (haz clic para mostrar/ocultar):</p>
+    <button onclick="const sol = document.getElementById('sol'); const oculto = sol.style.display === 'none' || sol.style.display === ''; sol.style.display = oculto ? 'block' : 'none'; this.textContent = oculto ? 'Ocultar solución' : 'Mostrar solución';">
+        Mostrar solución
+    </button>
 
     <pre id="sol" style="display:none;">
 &lt;header&gt;
