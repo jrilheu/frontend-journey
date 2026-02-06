@@ -186,6 +186,49 @@
         margin: 0 20px 20px;
     }
 
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
     @media (max-width: 768px) {
         h1 { font-size: 2rem; }
         h2 { font-size: 1.4rem; }
@@ -257,15 +300,27 @@
     <h2>4. Etiquetas semánticas modernas más importantes</h2>
     <ul>
         <li><strong>&lt;header&gt;</strong> – Encabezado de página o sección</li>
-        <li><strong>&lt;nav&gt;</strong> – Navegación principal o secundaria</li>
+        <li><strong>&lt;nav&gt;</strong> – Navegación principal o secundaria (el menu de la páagina)</li>
         <li><strong>&lt;main&gt;</strong> – Contenido principal del documento</li>
         <li><strong>&lt;section&gt;</strong> – Agrupación temática de contenido</li>
         <li><strong>&lt;article&gt;</strong> – Contenido independiente (post, noticia, card)</li>
-        <li><strong>&lt;aside&gt;</strong> – Información complementaria</li>
+        <li><strong>&lt;aside&gt;</strong> – Información complementaria (sidebar: que podria ser una barra lateral con otro menu para casos que requieran mayor jerarquia entre secciones de un página, o publicidad, etc)</li>
         <li><strong>&lt;footer&gt;</strong> – Pie de página o sección</li>
     </ul>
 
-    <h2>5. Mini‑ejercicio (5 minutos)</h2>
+    <h2>5. Mira el siguiente video para complementar tu aprendizaje</h2>
+    <p class="video-desc">Presta atención a los primeros 12 minutos de este video, donde se explica muy bien de qué va nuestra clase.</p>
+    <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/3nYLTiY5skU" title="Curso HTML desde cero - Midudev" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <a href="https://www.youtube.com/watch?v=3nYLTiY5skU" target="_blank" rel="noopener noreferrer" class="video-pill">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        Abrir en YouTube — Curso HTML desde cero (Midudev)
+    </a>
+
+    <h2>6. Mini‑ejercicio (5 minutos)</h2>
     <p>Convierte este fragmento no semántico en uno semántico:</p>
 
     <pre>
@@ -297,7 +352,7 @@
 &lt;/footer&gt;
     </pre>
 
-    <h2>6. Mini‑quiz interactivo</h2>
+    <h2>7. Mini‑quiz interactivo</h2>
     <div class="quiz">
         <p><strong>¿Cuál de estas etiquetas es la más adecuada para un bloque de navegación?</strong></p>
         <button onclick="alert('Correcto 🎉')">&lt;nav&gt;</button>
@@ -305,7 +360,7 @@
         <button onclick="alert('No. &lt;div&gt; no aporta semántica.')">&lt;div&gt;</button>
     </div>
 
-    <h2>7. Cierre de la clase</h2>
+    <h2>8. Cierre de la clase</h2>
     <p>
         Hoy aprendiste qué es el HTML semántico moderno, por qué es esencial y cuáles son sus etiquetas principales.  
         En la siguiente clase profundizaremos en <strong>cómo estructurar correctamente una página completa</strong> usando semántica realista.
