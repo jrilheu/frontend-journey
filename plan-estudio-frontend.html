@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Plan de Estudio Frontend - Nivel por Nivel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-card: #151b3d;
+            --accent-1: #00f5d4;
+            --accent-2: #f15bb5;
+            --accent-3: #fee440;
+            --text-primary: #e8f1f5;
+            --text-secondary: #a8b8c2;
+            --success: #00f5d4;
+            --warning: #fee440;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+        
+        h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--accent-1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,245,212,0.2);
+        }
+        
+        .stat-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .level {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--accent-1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .level.locked {
+            opacity: 0.6;
+            border-left-color: #444;
+        }
+        
+        .level.completed {
+            border-left-color: var(--success);
+            background: linear-gradient(135deg, rgba(0,245,212,0.05) 0%, var(--bg-card) 100%);
+        }
+        
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .level-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .level-badge {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .badge-beginner { background: linear-gradient(135deg, #00f5d4, #00d4aa); }
+        .badge-intermediate { background: linear-gradient(135deg, #fee440, #f9a826); }
+        .badge-advanced { background: linear-gradient(135deg, #f15bb5, #9b4dca); }
+        
+        .level-duration {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .level-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .topic {
+            background: rgba(255,255,255,0.03);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .topic:hover {
+            background: rgba(0,245,212,0.1);
+            border-color: var(--accent-1);
+            transform: translateX(5px);
+        }
+        
+        .topic-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .topic-time {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-1);
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .checkbox.checked {
+            background: var(--accent-1);
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--bg-dark);
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .project-box {
+            background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px solid var(--accent-2);
+        }
+        
+        .project-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-2);
+            margin-bottom: 10px;
+        }
+        
+        .tips {
+            background: rgba(254,228,64,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 4px solid var(--accent-3);
+        }
+        
+        .tips h3 {
+            color: var(--accent-3);
+            margin-bottom: 15px;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        .tip-item {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tip-item::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .resources {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .resource-link {
+            color: var(--accent-1);
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 8px 15px;
+            background: rgba(0,245,212,0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-link:hover {
+            background: rgba(0,245,212,0.2);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .level-title { font-size: 1.4rem; }
+            .topics { grid-template-columns: 1fr; }
+        }
+        
+        .motivational {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(0,245,212,0.1) 100%);
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+        
+        .motivational h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent-2);
+        }
+        
+        .session-timer {
+            background: rgba(0,245,212,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px solid var(--accent-1);
+        }
+        
+        .timer-display {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            color: var(--accent-1);
+            margin: 15px 0;
+        }
+        
+        .timer-btn {
+            background: var(--accent-1);
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .timer-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Tu Viaje Frontend</h1>
+            <p class="subtitle">De HTML/CSS a Desarrollador de proyectos web - Sin Ansiedad, Con Propósito, con las tecnologias mas demandadas en el mercado</p>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">6-9</div>
+                <div class="stat-label">Meses para ser Contratable</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">25-45</div>
+                <div class="stat-label">Minutos por Sesión</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Niveles de Maestría</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Título Necesario</div>
+            </div>
+        </div>
+
+        <div class="session-timer">
+            <h3>⏱️ Temporizador Pomodoro Anti-Ansiedad</h3>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <button class="timer-btn" onclick="startTimer()">Iniciar Sesión</button>
+            <button class="timer-btn" onclick="resetTimer()">Reiniciar</button>
+            <p style="margin-top: 10px; color: var(--text-secondary);">25 min trabajo → 5 min descanso</p>
+        </div>
+
+        <!-- NIVEL 1 -->
+        <div class="level" id="level1">
+            <div class="level-header">
+                <h2 class="level-title">NIVEL 1: Fundamentos Sólidos</h2>
+                <span class="level-badge badge-beginner">Principiante</span>
+            </div>
+            <div class="level-duration">⏱️ Duración: 4-6 semanas | 📅 3-4 sesiones/semana</div>
+            <div class="level-description">
+                Consolida lo que sabes de HTML/CSS y agrégale superpoderes modernos. Aquí construyes la base que te diferenciará.
+            </div>
+            
+            <div class="topics">
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">HTML Semántico Moderno</div>
+                    <div class="topic-time">3 sesiones × 30 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">CSS Grid & Flexbox Mastery</div>
+                    <div class="topic-time">5 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">CSS Variables & Custom Properties</div>
+                    <div class="topic-time">2 sesiones × 25 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Responsive Design (Mobile-First)</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Git & GitHub Básico</div>
+                    <div class="topic-time">3 sesiones × 30 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Accesibilidad Web (a11y) Básico</div>
+                    <div class="topic-time">2 sesiones × 25 min</div>
+                </div>
+            </div>
+            
+            <div class="project-box">
+                <div class="project-title">🎯 PROYECTO NIVEL 1: Landing Page Portfolio Personal</div>
+                <p>Crea una landing page moderna y responsive que muestre quién eres. Debe tener: hero section, about, proyectos (aunque sean inventados), contacto. Súbela a GitHub Pages.</p>
+                <p style="margin-top: 10px;"><strong>Resultado:</strong> Tu primer proyecto público + URL para compartir</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress1" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- NIVEL 2 -->
+        <div class="level" id="level2">
+            <div class="level-header">
+                <h2 class="level-title">NIVEL 2: JavaScript Esencial</h2>
+                <span class="level-badge badge-beginner">Principiante+</span>
+            </div>
+            <div class="level-duration">⏱️ Duración: 6-8 semanas | 📅 4 sesiones/semana</div>
+            <div class="level-description">
+                JavaScript es tu llave al mercado laboral. Este nivel te enseña a pensar como programador y manipular la web.
+            </div>
+            
+            <div class="topics">
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Variables, Tipos de Datos, Operadores</div>
+                    <div class="topic-time">3 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Funciones (ES6+, Arrow Functions)</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Arrays & Métodos (map, filter, reduce)</div>
+                    <div class="topic-time">5 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Objetos y Destructuring</div>
+                    <div class="topic-time">3 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">DOM Manipulation</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Event Listeners & Event Delegation</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Fetch API & JSON</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Async/Await & Promises</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+            </div>
+            
+            <div class="project-box">
+                <div class="project-title">🎯 PROYECTO NIVEL 2: App de Tareas (Todo App) + API</div>
+                <p>Construye una todo app que guarde en localStorage + conecta a una API pública (ejemplo: JSONPlaceholder). Features: agregar/eliminar/completar tareas, filtros, persistencia de datos.</p>
+                <p style="margin-top: 10px;"><strong>Resultado:</strong> App funcional que demuestra JS skills + trabajo con APIs</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress2" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- NIVEL 3 -->
+        <div class="level" id="level3">
+            <div class="level-header">
+                <h2 class="level-title">NIVEL 3: React & Ecosistema Moderno</h2>
+                <span class="level-badge badge-intermediate">Intermedio</span>
+            </div>
+            <div class="level-duration">⏱️ Duración: 8-10 semanas | 📅 4-5 sesiones/semana</div>
+            <div class="level-description">
+                React es lo más demandado en el mercado. Aquí aprendes la biblioteca que abre puertas a trabajos remotos y bien pagados.
+            </div>
+            
+            <div class="topics">
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Componentes & JSX</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Props & State</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Hooks (useState, useEffect)</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">React Router (navegación)</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Context API & useContext</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Formularios & Validación</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Consumo de APIs con React</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Styled Components / Tailwind CSS</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+            </div>
+            
+            <div class="project-box">
+                <div class="project-title">🎯 PROYECTO NIVEL 3: App de Películas/Series (tipo Netflix)</div>
+                <p>Usa la API de TMDB. Features: búsqueda, filtros por género, detalles de película, favoritos guardados. Múltiples páginas con React Router. Despliega en Vercel/Netlify.</p>
+                <p style="margin-top: 10px;"><strong>Resultado:</strong> Portfolio piece que impresiona + experiencia con APIs reales</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress3" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- NIVEL 4 -->
+        <div class="level" id="level4">
+            <div class="level-header">
+                <h2 class="level-title">NIVEL 4: Herramientas Profesionales</h2>
+                <span class="level-badge badge-intermediate">Intermedio+</span>
+            </div>
+            <div class="level-duration">⏱️ Duración: 6-8 semanas | 📅 4 sesiones/semana</div>
+            <div class="level-description">
+                Aprende las herramientas que usan equipos reales: testing, TypeScript, manejo de estado. Esto te hace contratatable.
+            </div>
+            
+            <div class="topics">
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">TypeScript Basics</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">React con TypeScript</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">State Management (Zustand o Redux Toolkit)</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">React Query / TanStack Query</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Testing (Jest + React Testing Library)</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Git Avanzado (rebase, merge, conflicts)</div>
+                    <div class="topic-time">3 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Next.js Fundamentals</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+            </div>
+            
+            <div class="project-box">
+                <div class="project-title">🎯 PROYECTO NIVEL 4: E-commerce Completo</div>
+                <p>Tienda online con Next.js + TypeScript. Carrito de compras, filtros avanzados, autenticación (Firebase/Supabase), checkout simulado. Usa Zustand para estado global.</p>
+                <p style="margin-top: 10px;"><strong>Resultado:</strong> Proyecto nivel empresa que puedes mostrar en entrevistas</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress4" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- NIVEL 5 -->
+        <div class="level" id="level5">
+            <div class="level-header">
+                <h2 class="level-title">NIVEL 5: Job-Ready & Especialización</h2>
+                <span class="level-badge badge-advanced">Avanzado</span>
+            </div>
+            <div class="level-duration">⏱️ Duración: 4-6 semanas | 📅 5 sesiones/semana</div>
+            <div class="level-description">
+                El sprint final: optimización, mejores prácticas, contribuciones open source y preparación para entrevistas.
+            </div>
+            
+            <div class="topics">
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Performance Optimization</div>
+                    <div class="topic-time">4 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">SEO para React/Next.js</div>
+                    <div class="topic-time">3 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">CI/CD Básico (GitHub Actions)</div>
+                    <div class="topic-time">3 sesiones × 35 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Contribuir a Open Source</div>
+                    <div class="topic-time">6 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Algoritmos JS para Entrevistas</div>
+                    <div class="topic-time">8 sesiones × 45 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Portafolio & LinkedIn Optimization</div>
+                    <div class="topic-time">4 sesiones × 40 min</div>
+                </div>
+                <div class="topic" onclick="toggleTopic(this)">
+                    <input type="checkbox" class="checkbox">
+                    <div class="topic-name">Mock Interviews & Behavioral Prep</div>
+                    <div class="topic-time">5 sesiones × 45 min</div>
+                </div>
+            </div>
+            
+            <div class="project-box">
+                <div class="project-title">🎯 PROYECTO NIVEL 5: Contribución Open Source + App Final</div>
+                <p>1) Haz 3+ PRs aceptados en proyectos open source. 2) Crea tu app más ambiciosa: Dashboard complejo, SaaS tool, o herramienta que resuelva un problema real. Full TypeScript, tests, CI/CD.</p>
+                <p style="margin-top: 10px;"><strong>Resultado:</strong> GitHub que demuestra colaboración + proyecto showcase definitivo</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress5" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="tips">
+            <h3>💡 Tips Anti-Ansiedad para Completar Este Plan</h3>
+            <div class="tip-item"><strong>Regla del Progreso Mínimo:</strong> Si solo puedes hacer 15 minutos, házlos. Progreso > Perfección.</div>
+            <div class="tip-item"><strong>Visual de Victoria:</strong> Marca cada checkbox. Ver progreso reduce ansiedad.</div>
+            <div class="tip-item"><strong>Un Tema a la Vez:</strong> No avances al siguiente hasta dominar el actual. Profundidad > Velocidad.</div>
+            <div class="tip-item"><strong>Día de Repaso Semanal:</strong> Viernes = revisar lo aprendido. No código nuevo.</div>
+            <div class="tip-item"><strong>Comunidad:</strong> Únete a Discord de programación en español (freeCodeCamp ES, Midudev). No estás solo.</div>
+            <div class="tip-item"><strong>Proyectos Pequeños Entre Niveles:</strong> Si te abrumas, haz mini-proyectos (calculadora, reloj, etc).</div>
+            <div class="tip-item"><strong>Celebra Micro-Victorias:</strong> Completaste un tema? Celébralo. Tu cerebro necesita dopamina.</div>
+        </div>
+
+        <div class="resources">
+            <h3 style="margin-bottom: 15px; font-family: 'Space Mono', monospace;">📚 Recursos Gratuitos en Español</h3>
+            <a href="https://lenguajejs.com" class="resource-link" target="_blank">LenguajeJS</a>
+            <a href="https://www.youtube.com/@midudev" class="resource-link" target="_blank">Midudev (YouTube)</a>
+            <a href="https://www.freecodecamp.org/espanol" class="resource-link" target="_blank">freeCodeCamp ES</a>
+            <a href="https://es.javascript.info" class="resource-link" target="_blank">JavaScript.info ES</a>
+            <a href="https://www.theodinproject.com" class="resource-link" target="_blank">The Odin Project</a>
+            <a href="https://scrimba.com" class="resource-link" target="_blank">Scrimba (Interactivo)</a>
+        </div>
+
+        <div class="motivational">
+            <h2>🔥 Tu Realidad en 6-9 Meses</h2>
+            <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; color: var(--text-secondary);">
+                Con este plan, en menos de un año puedes estar aplicando a trabajos remotos de $800-1500 USD/mes para empresas latinoamericanas, o $2000+ para empresas extranjeras. No necesitas título. Solo necesitas: este plan + constancia + proyectos en GitHub + LinkedIn activo.
+                <br><br>
+                <strong style="color: var(--accent-2);">Tu ansiedad miente. Tu concentración mejora con práctica. Salir de tu zona de confort y enfrentar lo desconocido, siempre es un desafio divertido. Let's go.</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutos en segundos
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    alert('¡Sesión completada! Toma 5 minutos de descanso 🎉');
+                    timeLeft = 25 * 60;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+        }
+
+        function toggleTopic(element) {
+            const checkbox = element.querySelector('.checkbox');
+            checkbox.classList.toggle('checked');
+            
+            // Calcular progreso del nivel
+            const level = element.closest('.level');
+            const levelId = level.id;
+            const allCheckboxes = level.querySelectorAll('.checkbox');
+            const checkedBoxes = level.querySelectorAll('.checkbox.checked');
+            const progress = (checkedBoxes.length / allCheckboxes.length) * 100;
+            
+            const progressBar = level.querySelector('.progress-fill');
+            progressBar.style.width = progress + '%';
+            
+            // Guardar en localStorage
+            saveProgress();
+        }
+
+        function saveProgress() {
+            const levels = document.querySelectorAll('.level');
+            const progressData = {};
+            
+            levels.forEach(level => {
+                const topics = level.querySelectorAll('.topic');
+                const topicStates = [];
+                topics.forEach((topic, index) => {
+                    const checkbox = topic.querySelector('.checkbox');
+                    topicStates.push(checkbox.classList.contains('checked'));
+                });
+                progressData[level.id] = topicStates;
+            });
+            
+            localStorage.setItem('frontendProgress', JSON.stringify(progressData));
+        }
+
+        function loadProgress() {
+            const savedData = localStorage.getItem('frontendProgress');
+            if (!savedData) return;
+            
+            const progressData = JSON.parse(savedData);
+            
+            Object.keys(progressData).forEach(levelId => {
+                const level = document.getElementById(levelId);
+                if (!level) return;
+                
+                const topics = level.querySelectorAll('.topic');
+                const states = progressData[levelId];
+                
+                topics.forEach((topic, index) => {
+                    if (states[index]) {
+                        const checkbox = topic.querySelector('.checkbox');
+                        checkbox.classList.add('checked');
+                    }
+                });
+                
+                // Actualizar barra de progreso
+                const allCheckboxes = level.querySelectorAll('.checkbox');
+                const checkedBoxes = level.querySelectorAll('.checkbox.checked');
+                const progress = (checkedBoxes.length / allCheckboxes.length) * 100;
+                
+                const progressBar = level.querySelector('.progress-fill');
+                progressBar.style.width = progress + '%';
+            });
+        }
+
+        // Cargar progreso al inicio
+        window.addEventListener('load', loadProgress);
+    </script>
+</body>
+</html>

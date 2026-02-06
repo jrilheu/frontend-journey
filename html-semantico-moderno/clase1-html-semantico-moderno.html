@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 1 – HTML Semántico Moderno</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 1 – Introducción al HTML Semántico Moderno</h1>
+    <p class="subtitle">Duración: 30 minutos</p>
+</header>
+
+<main>
+
+    <h2>Objetivo de la clase</h2>
+    <p>
+        Comprender qué es el <strong>HTML semántico moderno</strong>, por qué es esencial en el desarrollo front‑end actual y cómo se diferencia del HTML no semántico.
+    </p>
+
+    <h2>1. ¿Qué es el HTML semántico?</h2>
+    <p>
+        HTML semántico significa usar etiquetas que describen el propósito del contenido.  
+        No se trata solo de “mostrar cosas”, sino de comunicar significado a navegadores, motores de búsqueda, lectores de pantalla y otros sistemas.
+    </p>
+
+    <div class="highlight">
+        <strong>Idea clave:</strong> La semántica permite que el contenido sea comprensible tanto para humanos como para máquinas.
+    </div>
+
+    <h2>2. ¿Por qué es importante?</h2>
+    <ul>
+        <li><strong>Accesibilidad:</strong> lectores de pantalla entienden mejor la estructura.</li>
+        <li><strong>SEO:</strong> los buscadores interpretan mejor el contenido.</li>
+        <li><strong>Mantenibilidad:</strong> el código es más claro y fácil de extender.</li>
+        <li><strong>Buenas prácticas:</strong> estándar en la industria moderna.</li>
+    </ul>
+
+    <h2>3. HTML no semántico vs semántico</h2>
+
+    <h3>Ejemplo no semántico</h3>
+    <pre>
+&lt;div&gt;
+    &lt;div&gt;Mi Blog&lt;/div&gt;
+    &lt;div&gt;
+        &lt;div&gt;Artículo 1&lt;/div&gt;
+        &lt;div&gt;Contenido del artículo...&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+    </pre>
+
+    <h3>Ejemplo semántico</h3>
+    <pre>
+&lt;header&gt;
+    &lt;h1&gt;Mi Blog&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+    &lt;article&gt;
+        &lt;h2&gt;Artículo 1&lt;/h2&gt;
+        &lt;p&gt;Contenido del artículo...&lt;/p&gt;
+    &lt;/article&gt;
+&lt;/main&gt;
+    </pre>
+
+    <h2>4. Etiquetas semánticas modernas más importantes</h2>
+    <ul>
+        <li><strong>&lt;header&gt;</strong> – Encabezado de página o sección</li>
+        <li><strong>&lt;nav&gt;</strong> – Navegación principal o secundaria</li>
+        <li><strong>&lt;main&gt;</strong> – Contenido principal del documento</li>
+        <li><strong>&lt;section&gt;</strong> – Agrupación temática de contenido</li>
+        <li><strong>&lt;article&gt;</strong> – Contenido independiente (post, noticia, card)</li>
+        <li><strong>&lt;aside&gt;</strong> – Información complementaria</li>
+        <li><strong>&lt;footer&gt;</strong> – Pie de página o sección</li>
+    </ul>
+
+    <h2>5. Mini‑ejercicio (5 minutos)</h2>
+    <p>Convierte este fragmento no semántico en uno semántico:</p>
+
+    <pre>
+&lt;div class="top"&gt;Mi Portfolio&lt;/div&gt;
+&lt;div class="content"&gt;
+    &lt;div class="item"&gt;Proyecto 1&lt;/div&gt;
+    &lt;div class="item"&gt;Proyecto 2&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="bottom"&gt;Contacto&lt;/div&gt;
+    </pre>
+
+    <p>Solución sugerida (haz clic para mostrar):</p>
+    <button onclick="document.getElementById('sol').style.display='block'">Mostrar solución</button>
+
+    <pre id="sol" style="display:none;">
+&lt;header&gt;
+    &lt;h1&gt;Mi Portfolio&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+    &lt;section&gt;
+        &lt;article&gt;Proyecto 1&lt;/article&gt;
+        &lt;article&gt;Proyecto 2&lt;/article&gt;
+    &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+    &lt;p&gt;Contacto&lt;/p&gt;
+&lt;/footer&gt;
+    </pre>
+
+    <h2>6. Mini‑quiz interactivo</h2>
+    <div class="quiz">
+        <p><strong>¿Cuál de estas etiquetas es la más adecuada para un bloque de navegación?</strong></p>
+        <button onclick="alert('Correcto 🎉')">&lt;nav&gt;</button>
+        <button onclick="alert('No exactamente. Esa etiqueta no describe navegación.')">&lt;section&gt;</button>
+        <button onclick="alert('No. &lt;div&gt; no aporta semántica.')">&lt;div&gt;</button>
+    </div>
+
+    <h2>7. Cierre de la clase</h2>
+    <p>
+        Hoy aprendiste qué es el HTML semántico moderno, por qué es esencial y cuáles son sus etiquetas principales.  
+        En la siguiente clase profundizaremos en <strong>cómo estructurar correctamente una página completa</strong> usando semántica realista.
+    </p>
+
+</main>
+
+<footer>
+    Clase 1 – HTML Semántico Moderno
+</footer>
+
+</body>
+</html>
