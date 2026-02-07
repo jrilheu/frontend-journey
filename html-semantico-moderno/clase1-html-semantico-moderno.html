@@ -229,6 +229,23 @@
         flex-shrink: 0;
     }
 
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
     @media (max-width: 768px) {
         h1 { font-size: 2rem; }
         h2 { font-size: 1.4rem; }
@@ -367,6 +384,41 @@
         Hoy aprendiste qué es el HTML semántico moderno, por qué es esencial y cuáles son sus etiquetas principales.  
         En la siguiente clase profundizaremos en <strong>cómo estructurar correctamente una página completa</strong> usando semántica realista.
     </p>
+
+    <h2>Anexo: Herramientas de desarrollo</h2>
+    <p>Esta sección resume las herramientas que usarás a diario al programar y cómo dar el primer paso con un editor moderno.</p>
+
+    <h3>Principales herramientas de desarrollo</h3>
+    <p>Para crear sitios y aplicaciones web sueles necesitar:</p>
+    <ul>
+        <li><strong>Un editor de código o IDE</strong> — donde escribes HTML, CSS y JavaScript.</li>
+        <li><strong>Un navegador</strong> — para ver el resultado y usar las herramientas de desarrollador (F12).</li>
+        <li><strong>Un sistema de control de versiones</strong> — típicamente Git, para guardar cambios y trabajar en equipo.</li>
+    </ul>
+    <p>El centro de tu día a día es el editor o IDE; el resto lo irás incorporando poco a poco.</p>
+
+    <h3>¿Qué es un IDE?</h3>
+    <p>
+        Un <strong>IDE</strong> (Integrated Development Environment, «entorno de desarrollo integrado») es un programa que no solo te permite escribir código como en un bloc de notas, sino que integra funciones pensadas para programar: coloreado de sintaxis, autocompletado, búsqueda en el proyecto, terminal integrada, depuración y extensiones para lenguajes y frameworks.
+    </p>
+    <p>
+        Hoy en día muchos desarrolladores usan editores ligeros que se comportan como un IDE gracias a extensiones (por ejemplo VS Code), mientras que otros prefieren IDEs más pesados y específicos por lenguaje. Para front-end, un editor como VS Code es la opción más usada y recomendada.
+    </p>
+
+    <h3>¿Qué es VS Code y cómo descargarlo?</h3>
+    <p>
+        <strong>Visual Studio Code</strong> (VS Code) es un editor de código gratuito de Microsoft, muy usado en desarrollo web. Incluye soporte para HTML, CSS y JavaScript, terminal integrada, Git integrado y un amplio catálogo de extensiones (temas, lenguajes, formateadores, etc.).
+    </p>
+    <p><strong>Cómo descargarlo:</strong></p>
+    <ol>
+        <li>Entra en la web oficial: <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer" class="resource-inline">code.visualstudio.com</a>.</li>
+        <li>Haz clic en el botón de descarga para tu sistema (Windows, macOS o Linux).</li>
+        <li>Ejecuta el instalador y sigue los pasos (puedes dejar las opciones por defecto).</li>
+        <li>Abre VS Code y, si quieres, instala extensiones desde el panel de extensiones (Ctrl+Shift+X o Cmd+Shift+X en Mac).</li>
+    </ol>
+    <div class="highlight">
+        <strong>Recomendación:</strong> Usa VS Code para seguir este curso y para tus primeros proyectos. Más adelante puedes probar otros editores (Cursor, WebStorm, etc.) según tu gusto.
+    </div>
 
 </main>
 
