@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 2 – Estructura de una página con HTML semántico</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 2 – Estructura de una página con HTML semántico</h1>
+    <p class="subtitle">Duración: 35–40 minutos</p>
+</header>
+
+<main>
+
+    <h2>Objetivo de la clase</h2>
+    <p>
+        Aprender a <strong>estructurar correctamente una página web completa</strong> usando las etiquetas semánticas vistas en la Clase 1, con un orden lógico, jerarquía de encabezados y buenas prácticas de accesibilidad.
+    </p>
+
+    <h2>1. Esqueleto típico de una página</h2>
+    <p>
+        Una página web moderna suele seguir un esquema de «landmarks» (puntos de referencia) que los lectores de pantalla y los buscadores usan para entender la estructura. Este es el orden habitual:
+    </p>
+
+    <pre>
+&lt;body&gt;
+    &lt;header&gt;   &lt;!-- Cabecera del sitio (logo, menú) --&gt;
+    &lt;nav&gt;      &lt;!-- Navegación principal --&gt;
+    &lt;main&gt;     &lt;!-- Contenido principal (único por página) --&gt;
+        &lt;section&gt;  &lt;!-- Secciones temáticas --&gt;
+        &lt;article&gt;  &lt;!-- Contenido independiente --&gt;
+    &lt;/main&gt;
+    &lt;aside&gt;    &lt;!-- Contenido complementario (opcional) --&gt;
+    &lt;footer&gt;   &lt;!-- Pie de página --&gt;
+&lt;/body&gt;
+    </pre>
+
+    <div class="highlight">
+        <strong>Regla importante:</strong> Solo debe haber <strong>un</strong> <code>&lt;main&gt;</code> por página. Es el bloque principal que identifica el contenido central del documento.
+    </div>
+
+    <h2>2. Header y Nav: qué va en cada uno</h2>
+
+    <h3>Header</h3>
+    <p>
+        El <code>&lt;header&gt;</code> suele contener el encabezado de la página o de una sección: logo, título del sitio, y a menudo el menú de navegación. Puede haber varios <code>&lt;header&gt;</code> en una página (uno por sección), pero lo habitual es uno global al inicio.
+    </p>
+
+    <h3>Nav</h3>
+    <p>
+        El <code>&lt;nav&gt;</code> agrupa enlaces de navegación (menú principal, menú secundario, breadcrumbs). No uses <code>&lt;nav&gt;</code> para cualquier grupo de enlaces; reserva esta etiqueta para bloques que sirven para moverse por el sitio o por la página.
+    </p>
+
+    <pre>
+&lt;header&gt;
+    &lt;h1&gt;Mi Sitio Web&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="/"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/contacto"&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;
+    </pre>
+
+    <h2>3. Main, Section y Article: cuándo usar cada uno</h2>
+
+    <h3>Main</h3>
+    <p>
+        Todo el contenido principal de la página va dentro de <code>&lt;main&gt;</code>: el tema central del documento, excluyendo cabecera, navegación, sidebars y pie.
+    </p>
+
+    <h3>Section</h3>
+    <p>
+        <code>&lt;section&gt;</code> agrupa contenido por tema. Cada sección debería tener un encabezado (<code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, etc.). Úsala para dividir el <code>&lt;main&gt;</code> en bloques con sentido (por ejemplo: «Introducción», «Servicios», «Testimonios»).
+    </p>
+
+    <h3>Article</h3>
+    <p>
+        <code>&lt;article&gt;</code> representa un contenido autocontenido: un post de blog, una noticia, una ficha de producto, una tarjeta que podría leerse sola. Dentro de un <code>&lt;main&gt;</code> puedes tener varias <code>&lt;section&gt;</code> y dentro de cada una varios <code>&lt;article&gt;</code>.
+    </p>
+
+    <div class="highlight">
+        <strong>Resumen:</strong> <code>&lt;main&gt;</code> = contenido principal de la página. <code>&lt;section&gt;</code> = agrupación temática con título. <code>&lt;article&gt;</code> = unidad de contenido independiente (post, noticia, card).
+    </div>
+
+    <h2>4. Aside y Footer</h2>
+
+    <p>
+        <strong>Aside:</strong> información complementaria que no es el núcleo de la página: barra lateral con enlaces relacionados, publicidad, autor, etc. Puede estar dentro o fuera de <code>&lt;main&gt;</code> según el diseño.
+    </p>
+    <p>
+        <strong>Footer:</strong> pie de la página o de una sección. Suele incluir copyright, enlaces legales, redes sociales o información de contacto.
+    </p>
+
+    <h2>5. Jerarquía de encabezados (h1–h6)</h2>
+    <p>
+        Para accesibilidad y SEO es importante una jerarquía lógica: un solo <code>&lt;h1&gt;</code> por página (título principal), y luego <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, etc., sin saltar niveles (no pases de <code>h2</code> a <code>h4</code>).
+    </p>
+
+    <pre>
+&lt;h1&gt;Nombre del sitio o título de la página&lt;/h1&gt;
+  &lt;h2&gt;Sección 1&lt;/h2&gt;
+    &lt;h3&gt;Subsección 1.1&lt;/h3&gt;
+    &lt;h3&gt;Subsección 1.2&lt;/h3&gt;
+  &lt;h2&gt;Sección 2&lt;/h2&gt;
+    &lt;h3&gt;Subsección 2.1&lt;/h3&gt;
+    </pre>
+
+    <h2>6. Ejemplo completo: página de blog</h2>
+    <p>Estructura semántica realista de una página con listado de artículos:</p>
+
+    <pre>
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Mi Blog&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="/"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/sobre-mi"&gt;Sobre mí&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;section aria-label="Últimas entradas"&gt;
+            &lt;h2&gt;Últimas entradas&lt;/h2&gt;
+
+            &lt;article&gt;
+                &lt;h3&gt;Título del primer post&lt;/h3&gt;
+                &lt;p&gt;Resumen del contenido...&lt;/p&gt;
+            &lt;/article&gt;
+
+            &lt;article&gt;
+                &lt;h3&gt;Título del segundo post&lt;/h3&gt;
+                &lt;p&gt;Resumen del contenido...&lt;/p&gt;
+            &lt;/article&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;aside&gt;
+        &lt;h3&gt;Archivo&lt;/h3&gt;
+        &lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;
+    &lt;/aside&gt;
+
+    &lt;footer&gt;
+        &lt;p&gt;&amp;copy; 2025 Mi Blog. &lt;a href="/aviso-legal"&gt;Aviso legal&lt;/a&gt;&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+    </pre>
+
+    <p>
+        El atributo <code>aria-label</code> en la <code>&lt;section&gt;</code> ayuda a lectores de pantalla a identificar el propósito del bloque cuando el título no es suficiente.
+    </p>
+
+    <h2>7. Video recomendado</h2>
+    <p class="video-desc">Refuerza la idea de estructura semántica con este fragmento sobre landmarks y orden del documento.</p>
+    <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/3nYLTiY5skU?start=720" title="Curso HTML - Estructura (Midudev)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <a href="https://www.youtube.com/watch?v=3nYLTiY5skU&t=720s" target="_blank" rel="noopener noreferrer" class="video-pill">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        Abrir en YouTube — Curso HTML desde cero (Midudev, desde min 12)
+    </a>
+
+    <h2>8. Mini-ejercicio (5–10 minutos)</h2>
+    <p>Escribe el esqueleto HTML semántico de una <strong>página de portfolio</strong> con:</p>
+    <ul>
+        <li>Cabecera con tu nombre y un menú (Inicio, Proyectos, Contacto).</li>
+        <li>Contenido principal con una sección «Proyectos» y dos artículos (Proyecto A y Proyecto B).</li>
+        <li>Footer con el texto «© 2025 Mi nombre».</li>
+    </ul>
+
+    <p>Solución sugerida:</p>
+    <button onclick="const sol = document.getElementById('sol2'); const oculto = sol.style.display === 'none' || sol.style.display === ''; sol.style.display = oculto ? 'block' : 'none'; this.textContent = oculto ? 'Ocultar solución' : 'Mostrar solución';">
+        Mostrar solución
+    </button>
+
+    <pre id="sol2" style="display:none;">
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Mi nombre&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#inicio"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#proyectos"&gt;Proyectos&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#contacto"&gt;Contacto&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;section id="proyectos" aria-label="Proyectos"&gt;
+            &lt;h2&gt;Proyectos&lt;/h2&gt;
+            &lt;article&gt;
+                &lt;h3&gt;Proyecto A&lt;/h3&gt;
+                &lt;p&gt;Descripción...&lt;/p&gt;
+            &lt;/article&gt;
+            &lt;article&gt;
+                &lt;h3&gt;Proyecto B&lt;/h3&gt;
+                &lt;p&gt;Descripción...&lt;/p&gt;
+            &lt;/article&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;p&gt;&amp;copy; 2025 Mi nombre&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+    </pre>
+
+    <h2>9. Mini-quiz interactivo</h2>
+    <div class="quiz">
+        <p><strong>¿Cuántos elementos &lt;main&gt; debe tener una página HTML?</strong></p>
+        <button onclick="alert('Correcto 🎉')">Uno solo</button>
+        <button onclick="alert('No. Solo debe haber un contenido principal por página.')">Dos o más</button>
+        <button onclick="alert('No. Debe haber exactamente uno.')">Ninguno</button>
+    </div>
+
+    <div class="quiz">
+        <p><strong>¿Qué etiqueta conviene usar para un post de blog dentro de una lista de entradas?</strong></p>
+        <button onclick="alert('No. Section agrupa temas; un post es una unidad independiente.')">&lt;section&gt;</button>
+        <button onclick="alert('Correcto 🎉')">&lt;article&gt;</button>
+        <button onclick="alert('No. Un div no aporta semántica.')">&lt;div&gt;</button>
+    </div>
+
+    <h2>10. Cierre de la clase</h2>
+    <p>
+        En esta clase viste cómo estructurar una página completa con <strong>header</strong>, <strong>nav</strong>, <strong>main</strong>, <strong>section</strong>, <strong>article</strong>, <strong>aside</strong> y <strong>footer</strong>, y la importancia de la jerarquía de encabezados y de un solo <code>&lt;main&gt;</code> por página.
+    </p>
+    <p>
+        En la siguiente clase podrás profundizar en <strong>formularios accesibles</strong> y más etiquetas semánticas de texto (listas, citas, figuras) para seguir mejorando la calidad de tu HTML.
+    </p>
+
+</main>
+
+<footer>
+    Clase 2 – HTML Semántico Moderno
+</footer>
+
+</body>
+</html>
