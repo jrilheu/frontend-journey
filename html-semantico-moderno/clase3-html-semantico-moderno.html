@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 3 – Formularios accesibles y semántica de texto</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 3 – Formularios accesibles y semántica de texto</h1>
+    <p class="subtitle">Duración: aprox. 30 minutos</p>
+</header>
+
+<main>
+
+    <h2>Objetivo de la clase</h2>
+    <p>
+        Aprender a crear <strong>formularios accesibles</strong> con las etiquetas y atributos adecuados, y a usar <strong>etiquetas semánticas de texto</strong> (listas, citas, figuras) para mejorar la calidad y la accesibilidad de tu HTML.
+    </p>
+
+    <h2>1. Formularios: por qué la accesibilidad importa</h2>
+    <p>
+        Un formulario bien marcado permite que los lectores de pantalla asocien cada campo con su etiqueta, que el usuario pueda enviar el formulario con teclado y que los mensajes de error se anuncien correctamente. Todo empieza por el HTML semántico.
+    </p>
+
+    <h2>2. Label y asociación con el campo</h2>
+    <p>
+        Cada campo de formulario debe tener una <strong>etiqueta visible</strong> que indique qué se debe escribir. En HTML se usa <code>&lt;label&gt;</code>. La asociación se hace de dos formas:
+    </p>
+
+    <h3>Opción A: label envuelve el input</h3>
+    <pre>
+&lt;label&gt;
+    Nombre
+    &lt;input type="text" name="nombre" required&gt;
+&lt;/label&gt;
+    </pre>
+
+    <h3>Opción B: label con for + id del input</h3>
+    <pre>
+&lt;label for="campo-email"&gt;Correo electrónico&lt;/label&gt;
+&lt;input type="email" id="campo-email" name="email" required&gt;
+    </pre>
+    <p>
+        Al hacer clic en el texto del <code>&lt;label&gt;</code>, el foco va al campo. Los lectores de pantalla leen la etiqueta al llegar al campo. <strong>No uses solo <code>placeholder</code></strong> como sustituto del label: el placeholder desaparece al escribir y no es suficiente para accesibilidad.
+    </p>
+
+    <div class="highlight">
+        <strong>Buenas prácticas:</strong> Usa <code>placeholder</code> como ayuda adicional (ejemplo, hint), nunca como única descripción. Siempre incluye un <code>&lt;label&gt;</code> visible o asociado con <code>aria-label</code> en casos excepcionales.
+    </div>
+
+    <h2>3. Fieldset y Legend para grupos de campos</h2>
+    <p>
+        Cuando varios campos forman un grupo (por ejemplo, «Dirección» o «Elige una opción»), usa <code>&lt;fieldset&gt;</code> para agruparlos y <code>&lt;legend&gt;</code> para el título del grupo. Así la estructura es clara para todos los usuarios.
+    </p>
+
+    <pre>
+&lt;fieldset&gt;
+    &lt;legend&gt;¿Cómo prefieres que te contactemos?&lt;/legend&gt;
+    &lt;label&gt;&lt;input type="radio" name="contacto" value="email"&gt; Email&lt;/label&gt;
+    &lt;label&gt;&lt;input type="radio" name="contacto" value="telefono"&gt; Teléfono&lt;/label&gt;
+&lt;/fieldset&gt;
+    </pre>
+
+    <h2>4. Tipos de input y botones</h2>
+    <ul>
+        <li><strong>type="text"</strong> – Texto corto (nombre, apellido).</li>
+        <li><strong>type="email"</strong> – Correo (el navegador puede validar formato).</li>
+        <li><strong>type="tel"</strong> – Teléfono (en móviles suele mostrar teclado numérico).</li>
+        <li><strong>type="number"</strong> – Números (usa con cuidado; para años o cantidades puede ser útil).</li>
+        <li><strong>type="submit"</strong> – Botón que envía el formulario.</li>
+        <li><strong>type="button"</strong> – Botón que no envía (para acciones con JavaScript).</li>
+    </ul>
+    <p>
+        En un formulario, el botón de envío debe ser <code>type="submit"</code>. Si usas <code>&lt;button&gt;</code>, especifica <code>type="submit"</code> o <code>type="button"</code> para evitar comportamientos distintos entre navegadores.
+    </p>
+
+    <h2>5. Ejemplo de formulario accesible</h2>
+    <pre>
+&lt;form action="/contacto" method="post"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Datos de contacto&lt;/legend&gt;
+        &lt;label for="nombre"&gt;Nombre&lt;/label&gt;
+        &lt;input type="text" id="nombre" name="nombre" required&gt;
+
+        &lt;label for="email"&gt;Correo&lt;/label&gt;
+        &lt;input type="email" id="email" name="email" required&gt;
+    &lt;/fieldset&gt;
+
+    &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+    </pre>
+
+    <h2>6. Semántica de texto: listas, citas y figuras</h2>
+
+    <h3>Listas</h3>
+    <p>
+        Ya conoces <code>&lt;ul&gt;</code> (lista sin orden) y <code>&lt;ol&gt;</code> (lista ordenada). Para pares término–definición (glosario, FAQ) usa <code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code> (término) y <code>&lt;dd&gt;</code> (definición).
+    </p>
+    <pre>
+&lt;dl&gt;
+    &lt;dt&gt;HTML&lt;/dt&gt;
+    &lt;dd&gt;Lenguaje de marcado para estructurar contenido web.&lt;/dd&gt;
+    &lt;dt&gt;CSS&lt;/dt&gt;
+    &lt;dd&gt;Lenguaje para dar estilo y diseño a las páginas.&lt;/dd&gt;
+&lt;/dl&gt;
+    </pre>
+
+    <h3>Citas</h3>
+    <p>
+        Para citar un bloque de texto de otra fuente: <code>&lt;blockquote&gt;</code>. Para la referencia (libro, autor, URL): <code>&lt;cite&gt;</code>. Para citas cortas dentro de un párrafo: <code>&lt;q&gt;</code>.
+    </p>
+    <pre>
+&lt;blockquote cite="https://ejemplo.com/fuente"&gt;
+    &lt;p&gt;El contenido que se cita textualmente va aquí.&lt;/p&gt;
+    &lt;cite&gt;— Autor, Obra o fuente&lt;/cite&gt;
+&lt;/blockquote&gt;
+    </pre>
+
+    <h3>Figuras (imagen + pie)</h3>
+    <p>
+        Cuando una imagen (o diagrama, código) va acompañada de un pie descriptivo, usa <code>&lt;figure&gt;</code> y <code>&lt;figcaption&gt;</code>. El navegador y los lectores de pantalla entienden que el pie pertenece a ese contenido.
+    </p>
+    <pre>
+&lt;figure&gt;
+    &lt;img src="diagrama.png" alt="Diagrama de la estructura HTML semántica"&gt;
+    &lt;figcaption&gt;Esquema de landmarks de una página web.&lt;/figcaption&gt;
+&lt;/figure&gt;
+    </pre>
+    <p>
+        Siempre incluye un <code>alt</code> descriptivo en las imágenes; si la imagen es decorativa, usa <code>alt=""</code>.
+    </p>
+
+    <h2>7. Mini-ejercicio (5–8 minutos)</h2>
+    <p>Crea el HTML de un formulario de <strong>registro breve</strong> con:</p>
+    <ul>
+        <li>Un fieldset «Datos de registro» con dos campos: usuario (text) y contraseña (password), cada uno con su label asociado por <code>for</code>/<code>id</code>.</li>
+        <li>Un botón «Registrarse» de tipo submit.</li>
+    </ul>
+
+    <p>Solución sugerida:</p>
+    <button onclick="const sol = document.getElementById('sol3'); const oculto = sol.style.display === 'none' || sol.style.display === ''; sol.style.display = oculto ? 'block' : 'none'; this.textContent = oculto ? 'Ocultar solución' : 'Mostrar solución';">
+        Mostrar solución
+    </button>
+
+    <pre id="sol3" style="display:none;">
+&lt;form action="/registro" method="post"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Datos de registro&lt;/legend&gt;
+        &lt;label for="usuario"&gt;Usuario&lt;/label&gt;
+        &lt;input type="text" id="usuario" name="usuario" required&gt;
+
+        &lt;label for="password"&gt;Contraseña&lt;/label&gt;
+        &lt;input type="password" id="password" name="password" required&gt;
+    &lt;/fieldset&gt;
+
+    &lt;button type="submit"&gt;Registrarse&lt;/button&gt;
+&lt;/form&gt;
+    </pre>
+
+    <h2>8. Mini-quiz interactivo</h2>
+    <div class="quiz">
+        <p><strong>¿Es correcto usar solo el atributo placeholder para describir un campo de formulario?</strong></p>
+        <button onclick="alert('No. El placeholder no sustituye al label para accesibilidad.')">Sí</button>
+        <button onclick="alert('Correcto 🎉')">No, siempre debe haber un label</button>
+    </div>
+
+    <div class="quiz">
+        <p><strong>¿Qué etiqueta se usa para agrupar una imagen con su pie de foto?</strong></p>
+        <button onclick="alert('Correcto 🎉')">&lt;figure&gt; y &lt;figcaption&gt;</button>
+        <button onclick="alert('No. Esa etiqueta no indica relación imagen–pie.')">&lt;div&gt;</button>
+        <button onclick="alert('No. Esa etiqueta es para citas.')">&lt;blockquote&gt;</button>
+    </div>
+
+    <h2>9. Cierre del módulo</h2>
+    <p>
+        En esta clase viste <strong>formularios accesibles</strong> (label, fieldset/legend, tipos de input y botones) y <strong>semántica de texto</strong> (listas <code>dl</code>, citas <code>blockquote</code>/<code>cite</code>, figuras <code>figure</code>/<code>figcaption</code>).
+    </p>
+    <p>
+        Con las tres clases del módulo de <strong>HTML Semántico Moderno</strong> ya tienes una base sólida: qué es la semántica, cómo estructurar una página completa y cómo marcar formularios y contenido de texto de forma accesible. En los siguientes módulos del plan seguirás con CSS y después con JavaScript para dar vida y estilo a tus páginas.
+    </p>
+
+</main>
+
+<footer>
+    <span>Clase 3 – HTML Semántico Moderno</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
