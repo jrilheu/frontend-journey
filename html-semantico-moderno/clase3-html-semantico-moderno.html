@@ -313,11 +313,11 @@
 &lt;/label&gt;
     </pre>
 
-    <h3>Opción B: label con for + id del input</h3>
+    <h3>Opción B: label con atributo for y el id del input</h3>
     <pre>
 &lt;label for="campo-email"&gt;Correo electrónico&lt;/label&gt;
 &lt;input type="email" id="campo-email" name="email" required&gt;
-    </pre>
+    </pre>  
     <p>
         Al hacer clic en el texto del <code>&lt;label&gt;</code>, el foco va al campo. Los lectores de pantalla leen la etiqueta al llegar al campo. <strong>No uses solo <code>placeholder</code></strong> como sustituto del label: el placeholder desaparece al escribir y no es suficiente para accesibilidad.
     </p>
@@ -449,7 +449,21 @@
         <button onclick="alert('No. Esa etiqueta es para citas.')">&lt;blockquote&gt;</button>
     </div>
 
-    <h2>9. Cierre del módulo</h2>
+    <h2>9. Ejercicio integrador (10–15 minutos)</h2>
+    <p>
+        En un archivo HTML limpio, crea dos versiones de una misma página muy sencilla:
+    </p>
+    <ol>
+        <li><strong>Versión no semántica:</strong> usa solo <code>&lt;div&gt;</code> y clases para maquetar la estructura.</li>
+        <li><strong>Versión semántica:</strong> usa todas las etiquetas semánticas que has visto hasta ahora: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>, formularios con <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;fieldset&gt;</code>, <code>&lt;legend&gt;</code>, y semántica de texto como <code>&lt;dl&gt;</code>, <code>&lt;blockquote&gt;</code>, <code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code>, etc.</li>
+    </ol>
+    <p>
+        La idea es que tengas un pequeño «laboratorio» para comparar cómo se ve y cómo se lee el código en cada caso.
+        Si puedes, abre ambas versiones con las herramientas de desarrollador del navegador o con un lector de pantalla
+        para constatar la diferencia entre usar HTML semántico y usar solo contenedores genéricos.
+    </p>
+
+    <h2>10. Cierre del módulo</h2>
     <p>
         En esta clase viste <strong>formularios accesibles</strong> (label, fieldset/legend, tipos de input y botones) y <strong>semántica de texto</strong> (listas <code>dl</code>, citas <code>blockquote</code>/<code>cite</code>, figuras <code>figure</code>/<code>figcaption</code>).
     </p>
