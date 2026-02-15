@@ -351,7 +351,7 @@
 
         <section aria-labelledby="sec-flexbox-grid">
     <h2 id="sec-flexbox-grid">¿Qué son Flexbox y CSS Grid?</h2>
-    <p>Son dos formas de <strong>organizar elementos en la página</strong> sin depender de trucos antiguos (como los floats o las tablas). Con ellos puedes alinear, repartir el espacio y hacer que el diseño se adapte a distintos tamaños de pantalla de forma clara y predecible.</p>
+    <p>Son dos formas de <strong>organizar elementos en la página</strong> sin depender de trucos antiguos y oscuros (como los floats o las tablas 😭). Con ellos puedes alinear, repartir el espacio y hacer que el diseño se adapte a distintos tamaños de pantalla de forma clara y predecible.</p>
     <p>La diferencia principal es la siguiente:</p>
     <ul>
         <li><strong>Flexbox</strong> trabaja en <strong>una sola dirección</strong>: una fila o una columna. Sirve muy bien para cosas como un menú de navegación en horizontal, una fila de tarjetas, centrar algo en medio de la pantalla o cualquier bloque donde los ítems van uno detrás de otro en una línea.</li>
@@ -429,6 +429,33 @@
             <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
             <p>Piensa en voz alta (o anótalo): ¿usarías Flexbox o CSS Grid para un menú de navegación que va en una sola fila horizontal? ¿Y para una galería de imágenes en cuadrícula de 3 columnas?</p>
             <p><small>Pista: en el primer caso solo tienes una dirección (una fila); en el segundo, filas y columnas. Con eso ya sabes cuál elegir en cada caso.</small></p>
+            <p>Practica estos estilos para darle forma a diferentes layouts que se te ocurran. Por ejemplo:</p>
+            <ul>
+                <li><strong>Barra de navegación:</strong> varios enlaces en una sola fila horizontal, centrados o repartidos con espacio entre ellos (Flexbox).</li>
+                <li><strong>Galería de fotos o tarjetas:</strong> cuadrícula de 3 o 4 columnas que se rellena en orden (CSS Grid).</li>
+                <li><strong>Cabecera de página:</strong> logo a la izquierda y menú a la derecha en la misma fila (Flexbox con <code>justify-content: space-between</code>).</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <p>Si quieres profundizar en los temas de esta clase, estos enlaces cubren los mismos conceptos con más detalle y ejemplos:</p>
+            <h3>Cascada y especificidad</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/Handling_conflicts" target="_blank" rel="noopener noreferrer">Cascada y conflicto de estilos (MDN)</a> — Cómo el navegador resuelve cuándo varias reglas afectan al mismo elemento.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Guides/Cascade/Specificity" target="_blank" rel="noopener noreferrer">Especificidad (MDN)</a> — Guía sobre el peso de los selectores, en español.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/the-cascade?hl=es" target="_blank" rel="noopener noreferrer">La cascada (web.dev)</a> y <a class="resource-inline" href="https://web.dev/learn/css/specificity?hl=es-419" target="_blank" rel="noopener noreferrer">Especificidad (web.dev)</a> — Lecciones breves y actualizadas.</li>
+            </ul>
+            <h3>Flexbox</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/CSS_layout/Flexbox" target="_blank" rel="noopener noreferrer">Flexbox – Aprende desarrollo web (MDN)</a> — Guía con ejercicios y ejemplos descargables.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_flexible_box_layout/Aligning_items_in_a_flex_container" target="_blank" rel="noopener noreferrer">Alineación de ítems en un contenedor flex (MDN)</a> — Referencia de <code>justify-content</code>, <code>align-items</code> y afines.</li>
+            </ul>
+            <h3>CSS Grid</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Guides/Grid_layout" target="_blank" rel="noopener noreferrer">Guía de Grid Layout (MDN)</a> — Introducción, conceptos y propiedades principales en español.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/CSS_layout" target="_blank" rel="noopener noreferrer">Diseño CSS (MDN)</a> — Visión general de Flexbox, Grid y otros métodos de layout.</li>
+            </ul>
         </section>
     </article>
 </main>
