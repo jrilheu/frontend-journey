@@ -109,6 +109,14 @@
         margin-bottom: 10px;
     }
 
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
     p, li {
         color: var(--text-secondary);
         margin-bottom: 12px;
@@ -294,89 +302,135 @@
 <body>
 <header>
     <h1>Clase 4 – Introducción al CSS Grid & Flexbox Mastery</h1>
-    <p class="subtitle">Duración: 35–40 minutos</p>
+    <p class="subtitle">Duración: 20-25 minutos</p>
 </header>
 
 <main>
+    <article aria-label="Contenido de la clase: introducción al CSS, Flexbox y Grid">
+        <section aria-labelledby="sec-css">
+    <h2 id="sec-css">¿Qué es el CSS y para qué sirve?</h2>
+    <p><strong>CSS</strong> (Cascading Style Sheets) es el lenguaje que define la <strong>presentación</strong> de un documento HTML: colores, tipografías, espaciados, disposición en pantalla y animaciones. El HTML describe la estructura y el significado del contenido; el CSS, tambien llamado hojas de estilo, dice cómo debe verse y, en buena medida, cómo se adapta a distintos dispositivos.</p>
+    <p><strong>Cómo funciona:</strong> El CSS se aplica mediante <strong>reglas</strong> formadas por un <strong>selector</strong> (qué elemento(s) afectar) y unas <strong>propiedades</strong> (qué estilo aplicar), cada propiedad tiene uno o varios valores a ser aplicados al selector.
+        
+    el formato de una regla es:
+    <pre>selector { 
+        propiedad: valor; 
+        propiedad: valor; ... 
+    }</pre>
+    
+    El navegador, llamado browser en ingles, como Google Chrome, Firefox, Safari, etc., combina las hojas de estilo, resuelve la cascada y la especificidad, y pinta la página según esas reglas. Puedes escribir CSS en archivos <code>.css</code> enlazados con <code>&lt;link&gt;</code>, en bloques <code>&lt;style&gt;</code> o en atributos <code>style</code> (solo para casos puntuales).</p>
 
-    <h2>¿Qué es el CSS y para qué sirve?</h2>
-    <p><strong>CSS</strong> (Cascading Style Sheets) es el lenguaje que define la <strong>presentación</strong> de un documento HTML: colores, tipografías, espaciados, disposición en pantalla y animaciones. El HTML describe la estructura y el significado del contenido; el CSS dice cómo debe verse y, en buena medida, cómo se adapta a distintos dispositivos.</p>
-    <p><strong>Cómo funciona:</strong> El CSS se aplica mediante <strong>reglas</strong> formadas por un <strong>selector</strong> (qué elemento(s) afectar) y unas <strong>propiedades</strong> (qué estilo aplicar). El navegador combina las hojas de estilo, resuelve la cascada y la especificidad, y pinta la página según esas reglas. Puedes escribir CSS en archivos <code>.css</code> enlazados con <code>&lt;link&gt;</code>, en bloques <code>&lt;style&gt;</code> o en atributos <code>style</code> (solo para casos puntuales).</p>
-    <p><strong>Utilidad en el HTML moderno:</strong> En el desarrollo web actual, el CSS es imprescindible para lograr diseños accesibles, responsivos y mantenibles. Permite separar estructura (HTML semántico) de presentación (CSS), reutilizar estilos, trabajar con variables (custom properties), y usar sistemas de layout como Flexbox y Grid, que veremos en esta clase.</p>
+    <h3>Repasamos los conceptos de resolución de la cascada y especificidad</h3>
 
-    <p>En esta primera clase sentamos las bases para dominar dos de las herramientas más potentes del CSS moderno: <strong>Flexbox</strong> y <strong>CSS Grid</strong>. Aprenderás qué son, cuándo usar cada uno y los conceptos fundamentales que necesitas para las siguientes clases.</p>
+    <p>Cuando varias reglas CSS afectan al mismo elemento, el navegador tiene que decidir cuál aplicar. Para eso usa la <strong>cascada</strong> y la <strong>especificidad</strong>. No hace falta memorizar fórmulas: con entender la idea ya evitas muchos dolores de cabeza.</p>
 
-    <h2>¿Qué son Flexbox y CSS Grid?</h2>
-    <p>Ambos son sistemas de layout que permiten organizar elementos en la página sin depender de floats ni tablas. Resuelven problemas de alineación, distribución del espacio y diseños responsivos de forma declarativa y predecible.</p>
+    <h4>¿Qué es resolver la cascada?</h4>
+    <p>La <strong>cascada</strong> es el orden en que el navegador aplica las reglas. «Resolver la cascada» significa elegir <em>qué regla gana</em> cuando hay varias para el mismo estilo. Para decidirlo, el navegador tiene en cuenta:</p>
     <ul>
-        <li><strong>Flexbox</strong> — Pensado para layouts en <strong>una dimensión</strong> (filas o columnas). Ideal para barras de navegación, tarjetas en fila, centrado vertical/horizontal y componentes que fluyen en una sola dirección.</li>
-        <li><strong>CSS Grid</strong> — Pensado para layouts en <strong>dos dimensiones</strong> (filas y columnas a la vez). Ideal para cuadrículas, dashboards, galerías y estructuras que necesitan control preciso de filas y columnas.</li>
+        <li><strong>Origen:</strong> ¿El estilo viene del navegador, de tu hoja CSS o del usuario? Normalmente gana lo que tú defines en tu CSS.</li>
+        <li><strong>Especificidad:</strong> Si dos reglas tuyas chocan, gana la que tiene el selector «más fuerte» (ver abajo).</li>
+        <li><strong>Orden en el código:</strong> Si todo lo anterior es igual, gana la regla que aparece <em>después</em> en el archivo.</li>
+    </ul>
+    <p>En el día a día suele importar sobre todo la especificidad y el orden: qué selector pesa más y qué declaración escribiste al final.</p>
+
+    <h4>¿Qué es la especificidad?</h4>
+    <p>La <strong>especificidad</strong> es el «peso» de un selector. Sirve para saber qué regla gana cuando dos o más selectores aplican al mismo elemento.</p>
+    <p>De menor a mayor peso (simplificado):</p>
+    <ul>
+        <li><strong>Elementos</strong> (por ejemplo <code>p</code>, <code>div</code>): poco peso.</li>
+        <li><strong>Clases</strong> (por ejemplo <code>.destacado</code>) y <strong>pseudo-clases</strong> (por ejemplo <code>:hover</code>): más peso.</li>
+        <li><strong>IDs</strong> (por ejemplo <code>#cabecera</code>): aún más peso.</li>
+        <li><strong>Estilos en línea</strong> (<code>style="..."</code> en el HTML): mucho peso (y suelen dificultar el mantenimiento, por eso se usan poco).</li>
+    </ul>
+    <p>Ejemplo: si tienes <code>.item { color: blue; }</code> y <code>#nav .item { color: red; }</code>, el segundo selector es más específico, así que el texto se verá rojo. Con la práctica irás viendo cuándo un estilo «no aplica» por culpa de la especificidad; entonces podrás simplificar selectores o reordenar reglas.</p>
+
+    <p><strong>Utilidad en el HTML moderno:</strong> Hoy en día el CSS es lo que hace posible diseños accesibles, que se adapten al móvil o al escritorio, y fáciles de mantener. Te permite dejar el HTML solo para la estructura y el significado, y usar el CSS para todo lo visual: así puedes cambiar el aspecto de la página sin tocar el contenido. Además, con cosas como las variables CSS o los sistemas de layout (Flexbox y Grid), puedes organizar y reutilizar estilos sin repetir código. Eso es justo lo que veremos a continuación.</p>
+
+    <p>En esta primera clase vamos a sentar las bases de dos herramientas muy usadas en el CSS actual: <strong>Flexbox</strong> y <strong>CSS Grid</strong>. Verás qué son, cuándo conviene usar cada una y los conceptos mínimos que necesitas para seguir con las siguientes clases.</p>
+        </section>
+
+        <section aria-labelledby="sec-flexbox-grid">
+    <h2 id="sec-flexbox-grid">¿Qué son Flexbox y CSS Grid?</h2>
+    <p>Son dos formas de <strong>organizar elementos en la página</strong> sin depender de trucos antiguos (como los floats o las tablas). Con ellos puedes alinear, repartir el espacio y hacer que el diseño se adapte a distintos tamaños de pantalla de forma clara y predecible.</p>
+    <p>La diferencia principal es la siguiente:</p>
+    <ul>
+        <li><strong>Flexbox</strong> trabaja en <strong>una sola dirección</strong>: una fila o una columna. Sirve muy bien para cosas como un menú de navegación en horizontal, una fila de tarjetas, centrar algo en medio de la pantalla o cualquier bloque donde los ítems van uno detrás de otro en una línea.</li>
+        <li><strong>CSS Grid</strong> trabaja en <strong>dos direcciones a la vez</strong>: filas y columnas. Es ideal cuando necesitas una cuadrícula de verdad: por ejemplo una galería de fotos, un panel de control con varias zonas o cualquier layout donde importe tanto la fila como la columna de cada elemento.</li>
     </ul>
 
-    <div class="highlight">
-        <strong>Regla práctica:</strong> Si es una fila o una columna de ítems → Flexbox. Si necesitas filas y columnas definidas (como una tabla o una cuadrícula) → CSS Grid. En muchos diseños usarás ambos juntos.
-    </div>
+    <aside class="highlight" role="note" aria-label="Regla práctica para elegir">
+        <strong>Regla práctica para elegir:</strong> Si lo que tienes es una fila o una columna de ítems → Flexbox. Si necesitas filas y columnas definidas (como una tabla o una cuadrícula) → CSS Grid. En muchos diseños acabarás usando los dos: por ejemplo Flexbox dentro de una celda de Grid.
+    </aside>
 
-    <h2>Bases de Flexbox</h2>
-    <p>Flexbox trabaja con un <strong>contenedor flex</strong> y sus <strong>hijos directos</strong> (ítems flex). El contenedor define la dirección y el comportamiento; los ítems se distribuyen según esas reglas.</p>
+        </section>
 
-    <h3>Conceptos clave</h3>
+        <section aria-labelledby="sec-bases-flexbox">
+    <h2 id="sec-bases-flexbox">Bases de Flexbox</h2>
+    <p>Para usar Flexbox necesitas un <strong>contenedor</strong> (el elemento al que le pones <code>display: flex</code>) y sus <strong>hijos directos</strong>, que pasan a ser «ítems flex». El contenedor es quien decide la dirección y cómo se reparten los ítems; los hijos se adaptan a esas reglas. Solo los hijos directos se comportan como ítems flex; lo que esté dentro de ellos no.</p>
+
+    <h3>Conceptos que debes conocer</h3>
     <ul>
-        <li><strong>Eje principal (main axis):</strong> La dirección en la que se disponen los ítems (horizontal por defecto).</li>
-        <li><strong>Eje transversal (cross axis):</strong> Perpendicular al principal; sirve para alinear en la otra dirección.</li>
-        <li><strong>flex-direction:</strong> <code>row</code> (por defecto), <code>row-reverse</code>, <code>column</code>, <code>column-reverse</code>.</li>
-        <li><strong>justify-content:</strong> Alinea los ítems a lo largo del eje principal (start, center, end, space-between, space-around, space-evenly).</li>
-        <li><strong>align-items:</strong> Alinea los ítems en el eje transversal (stretch, start, center, end, baseline).</li>
+        <li><strong>Eje principal:</strong> Es la línea en la que se colocan los ítems. Por defecto es horizontal (de izquierda a derecha), pero puedes cambiarla.</li>
+        <li><strong>Eje transversal:</strong> Es la dirección perpendicular al eje principal. Sirve para alinear los ítems en esa otra dirección (por ejemplo, centrarlos verticalmente cuando el eje principal es horizontal).</li>
+        <li><strong>flex-direction:</strong> Define si el eje principal es una fila (<code>row</code>, por defecto) o una columna (<code>column</code>). También puedes usar <code>row-reverse</code> y <code>column-reverse</code> para invertir el orden.</li>
+        <li><strong>justify-content:</strong> Alinea los ítems a lo largo del eje principal. Valores típicos: <code>start</code>, <code>center</code>, <code>end</code>, <code>space-between</code> (espacio entre ítems), <code>space-around</code>, <code>space-evenly</code>.</li>
+        <li><strong>align-items:</strong> Alinea los ítems en el eje transversal. Por ejemplo <code>center</code> para centrarlos en esa dirección, o <code>stretch</code> para que ocupen todo el alto (o ancho) disponible.</li>
     </ul>
 
-    <h3>Ejemplo mínimo: contenedor flex</h3>
+    <h3>Un ejemplo mínimo: contenedor flex</h3>
     <pre>.contenedor {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
 }</pre>
-    <p>Con esto, los hijos directos de <code>.contenedor</code> se disponen en fila, centrados en ambas direcciones y con espacio entre ellos (<code>gap</code>).</p>
+    <p>Con este código, todos los hijos directos de <code>.contenedor</code> se colocan en fila, quedan centrados en horizontal y en vertical, y tienen un espacio fijo entre ellos gracias a <code>gap</code>. Es un patrón muy común para centrar contenido o alinear botones en una barra.</p>
+        </section>
 
-    <h2>Bases de CSS Grid</h2>
-    <p>CSS Grid divide el espacio en <strong>filas y columnas</strong>. Defines la estructura en el contenedor y colocas (o dejas que se auto-coloquen) los hijos en las celdas.</p>
+        <section aria-labelledby="sec-bases-grid">
+    <h2 id="sec-bases-grid">Bases de CSS Grid</h2>
+    <p>Con CSS Grid divides el espacio en <strong>filas y columnas</strong>. Tú defines en el contenedor cuántas columnas y filas quieres (y de qué tamaño), y los hijos se van colocando en esas celdas. Puedes dejar que se rellenen solas en orden o indicar en qué celda va cada uno (eso lo verás en clases posteriores).</p>
 
-    <h3>Conceptos clave</h3>
+    <h3>Conceptos que debes conocer</h3>
     <ul>
-        <li><strong>Grid container:</strong> El elemento con <code>display: grid</code>.</li>
-        <li><strong>Grid tracks:</strong> Las filas y columnas (definidas con <code>grid-template-rows</code> y <code>grid-template-columns</code>).</li>
-        <li><strong>Celdas (cells):</strong> La intersección de una fila y una columna.</li>
-        <li><strong>Grid items:</strong> Los hijos directos del contenedor; cada uno ocupa una o más celdas.</li>
+        <li><strong>Contenedor grid:</strong> El elemento al que le pones <code>display: grid</code>. Solo los hijos directos participan en la cuadrícula.</li>
+        <li><strong>Tracks (pistas):</strong> Son las filas y las columnas. Las defines con <code>grid-template-columns</code> (para columnas) y <code>grid-template-rows</code> (para filas).</li>
+        <li><strong>Celdas:</strong> Cada «cuadradito» que se forma donde se cruzan una fila y una columna. Un ítem puede ocupar una celda o varias.</li>
+        <li><strong>Grid items:</strong> Los hijos directos del contenedor; cada uno es un ítem de la cuadrícula.</li>
     </ul>
 
-    <h3>Ejemplo mínimo: cuadrícula simple</h3>
+    <h3>Un ejemplo mínimo: cuadrícula simple</h3>
     <pre>.cuadricula {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 1rem;
 }</pre>
-    <p><code>1fr</code> es una unidad de fracción: cada columna ocupa una parte igual del espacio disponible. Los ítems se colocan automáticamente en las celdas de izquierda a derecha y de arriba abajo.</p>
+    <p>Aquí estamos diciendo: «tres columnas del mismo ancho y filas que se ajusten al contenido». La unidad <code>1fr</code> significa «una fracción del espacio disponible»: al poner <code>1fr 1fr 1fr</code>, las tres columnas se reparten el ancho a partes iguales. Los ítems se colocan solos de izquierda a derecha y de arriba abajo, como si rellenaras una tabla. <code>gap</code> añade espacio entre filas y columnas.</p>
 
-    <div class="highlight">
-        <strong>Resumen de esta clase:</strong> Flexbox = una dimensión (filas o columnas); Grid = dos dimensiones (filas y columnas). Dominar <code>display: flex</code>, <code>justify-content</code>, <code>align-items</code> y <code>display: grid</code> con <code>grid-template-*</code> y <code>gap</code> es la base para las siguientes clases.
-    </div>
+    <aside class="highlight" role="note" aria-label="Resumen de esta clase">
+        <strong>Resumen de esta clase:</strong> Flexbox organiza en una dimensión (fila o columna); Grid organiza en dos (filas y columnas). Con que te quedes con <code>display: flex</code>, <code>justify-content</code>, <code>align-items</code> y <code>gap</code> para Flexbox, y con <code>display: grid</code>, <code>grid-template-columns</code>, <code>grid-template-rows</code> y <code>gap</code> para Grid, tienes la base para las siguientes clases.
+    </aside>
+        </section>
 
-    <h2>Próximos pasos (Clases 2–5)</h2>
+        <section aria-labelledby="sec-proximos-pasos">
+    <h2 id="sec-proximos-pasos">Próximos pasos (Clases 2–5)</h2>
+    <p>En las siguientes clases iremos un poco más allá. No hace falta memorizar la lista; solo tenerla presente para saber qué viene:</p>
     <ol>
-        <li>Flexbox en profundidad: <code>flex-grow</code>, <code>flex-shrink</code>, <code>flex-basis</code>, orden y alineación por ítem.</li>
-        <li>Grid en profundidad: líneas, áreas con nombre, <code>grid-column</code> / <code>grid-row</code>, y patrones responsivos.</li>
-        <li>Patrones reales: cabecera, sidebar, footer y contenido principal con Grid y Flexbox.</li>
-        <li>Responsive: media queries, <code>auto-fill</code> / <code>auto-fit</code>, y combinación de ambos sistemas.</li>
-        <li>Proyecto integrador: maquetar una página completa aplicando todo lo aprendido.</li>
+        <li><strong>Flexbox en profundidad:</strong> Cómo hacer que algunos ítems crezcan o se encojan más que otros (<code>flex-grow</code>, <code>flex-shrink</code>, <code>flex-basis</code>), cambiar el orden y alinear ítems de forma individual.</li>
+        <li><strong>Grid en profundidad:</strong> Líneas de la cuadrícula, áreas con nombre y cómo colocar cada ítem donde tú quieras con <code>grid-column</code> y <code>grid-row</code>, además de patrones que se adaptan al ancho de pantalla.</li>
+        <li><strong>Patrones reales:</strong> Montar una página con cabecera, barra lateral, contenido principal y pie de página usando Grid y Flexbox.</li>
+        <li><strong>Responsive:</strong> Media queries, columnas que se adaptan solas (<code>auto-fill</code>, <code>auto-fit</code>) y combinar Flexbox y Grid en el mismo diseño.</li>
+        <li><strong>Proyecto integrador:</strong> Maquetar una página completa aplicando todo lo que hayas aprendido en el módulo.</li>
     </ol>
+        </section>
 
-    <section class="quiz">
-        <h3>Comprueba lo aprendido</h3>
-        <p>¿Cuándo elegirías Flexbox y cuándo CSS Grid para un menú de navegación horizontal? ¿Y para una galería de imágenes en cuadrícula de 3 columnas?</p>
-        <p><small>Respuesta breve: menú en una fila → Flexbox. Galería en filas y columnas → CSS Grid.</small></p>
-    </section>
-
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Piensa en voz alta (o anótalo): ¿usarías Flexbox o CSS Grid para un menú de navegación que va en una sola fila horizontal? ¿Y para una galería de imágenes en cuadrícula de 3 columnas?</p>
+            <p><small>Pista: en el primer caso solo tienes una dirección (una fila); en el segundo, filas y columnas. Con eso ya sabes cuál elegir en cada caso.</small></p>
+        </section>
+    </article>
 </main>
 
 <footer>
