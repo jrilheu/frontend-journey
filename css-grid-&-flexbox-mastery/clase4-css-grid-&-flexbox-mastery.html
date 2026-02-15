@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 4 – Introducción al CSS Grid &amp; Flexbox (Bases)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 4 – Introducción al CSS Grid & Flexbox Mastery</h1>
+    <p class="subtitle">Duración: 35–40 minutos</p>
+</header>
+
+<main>
+
+    <h2>¿Qué es el CSS y para qué sirve?</h2>
+    <p><strong>CSS</strong> (Cascading Style Sheets) es el lenguaje que define la <strong>presentación</strong> de un documento HTML: colores, tipografías, espaciados, disposición en pantalla y animaciones. El HTML describe la estructura y el significado del contenido; el CSS dice cómo debe verse y, en buena medida, cómo se adapta a distintos dispositivos.</p>
+    <p><strong>Cómo funciona:</strong> El CSS se aplica mediante <strong>reglas</strong> formadas por un <strong>selector</strong> (qué elemento(s) afectar) y unas <strong>propiedades</strong> (qué estilo aplicar). El navegador combina las hojas de estilo, resuelve la cascada y la especificidad, y pinta la página según esas reglas. Puedes escribir CSS en archivos <code>.css</code> enlazados con <code>&lt;link&gt;</code>, en bloques <code>&lt;style&gt;</code> o en atributos <code>style</code> (solo para casos puntuales).</p>
+    <p><strong>Utilidad en el HTML moderno:</strong> En el desarrollo web actual, el CSS es imprescindible para lograr diseños accesibles, responsivos y mantenibles. Permite separar estructura (HTML semántico) de presentación (CSS), reutilizar estilos, trabajar con variables (custom properties), y usar sistemas de layout como Flexbox y Grid, que veremos en esta clase.</p>
+
+    <p>En esta primera clase sentamos las bases para dominar dos de las herramientas más potentes del CSS moderno: <strong>Flexbox</strong> y <strong>CSS Grid</strong>. Aprenderás qué son, cuándo usar cada uno y los conceptos fundamentales que necesitas para las siguientes clases.</p>
+
+    <h2>¿Qué son Flexbox y CSS Grid?</h2>
+    <p>Ambos son sistemas de layout que permiten organizar elementos en la página sin depender de floats ni tablas. Resuelven problemas de alineación, distribución del espacio y diseños responsivos de forma declarativa y predecible.</p>
+    <ul>
+        <li><strong>Flexbox</strong> — Pensado para layouts en <strong>una dimensión</strong> (filas o columnas). Ideal para barras de navegación, tarjetas en fila, centrado vertical/horizontal y componentes que fluyen en una sola dirección.</li>
+        <li><strong>CSS Grid</strong> — Pensado para layouts en <strong>dos dimensiones</strong> (filas y columnas a la vez). Ideal para cuadrículas, dashboards, galerías y estructuras que necesitan control preciso de filas y columnas.</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>Regla práctica:</strong> Si es una fila o una columna de ítems → Flexbox. Si necesitas filas y columnas definidas (como una tabla o una cuadrícula) → CSS Grid. En muchos diseños usarás ambos juntos.
+    </div>
+
+    <h2>Bases de Flexbox</h2>
+    <p>Flexbox trabaja con un <strong>contenedor flex</strong> y sus <strong>hijos directos</strong> (ítems flex). El contenedor define la dirección y el comportamiento; los ítems se distribuyen según esas reglas.</p>
+
+    <h3>Conceptos clave</h3>
+    <ul>
+        <li><strong>Eje principal (main axis):</strong> La dirección en la que se disponen los ítems (horizontal por defecto).</li>
+        <li><strong>Eje transversal (cross axis):</strong> Perpendicular al principal; sirve para alinear en la otra dirección.</li>
+        <li><strong>flex-direction:</strong> <code>row</code> (por defecto), <code>row-reverse</code>, <code>column</code>, <code>column-reverse</code>.</li>
+        <li><strong>justify-content:</strong> Alinea los ítems a lo largo del eje principal (start, center, end, space-between, space-around, space-evenly).</li>
+        <li><strong>align-items:</strong> Alinea los ítems en el eje transversal (stretch, start, center, end, baseline).</li>
+    </ul>
+
+    <h3>Ejemplo mínimo: contenedor flex</h3>
+    <pre>.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}</pre>
+    <p>Con esto, los hijos directos de <code>.contenedor</code> se disponen en fila, centrados en ambas direcciones y con espacio entre ellos (<code>gap</code>).</p>
+
+    <h2>Bases de CSS Grid</h2>
+    <p>CSS Grid divide el espacio en <strong>filas y columnas</strong>. Defines la estructura en el contenedor y colocas (o dejas que se auto-coloquen) los hijos en las celdas.</p>
+
+    <h3>Conceptos clave</h3>
+    <ul>
+        <li><strong>Grid container:</strong> El elemento con <code>display: grid</code>.</li>
+        <li><strong>Grid tracks:</strong> Las filas y columnas (definidas con <code>grid-template-rows</code> y <code>grid-template-columns</code>).</li>
+        <li><strong>Celdas (cells):</strong> La intersección de una fila y una columna.</li>
+        <li><strong>Grid items:</strong> Los hijos directos del contenedor; cada uno ocupa una o más celdas.</li>
+    </ul>
+
+    <h3>Ejemplo mínimo: cuadrícula simple</h3>
+    <pre>.cuadricula {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}</pre>
+    <p><code>1fr</code> es una unidad de fracción: cada columna ocupa una parte igual del espacio disponible. Los ítems se colocan automáticamente en las celdas de izquierda a derecha y de arriba abajo.</p>
+
+    <div class="highlight">
+        <strong>Resumen de esta clase:</strong> Flexbox = una dimensión (filas o columnas); Grid = dos dimensiones (filas y columnas). Dominar <code>display: flex</code>, <code>justify-content</code>, <code>align-items</code> y <code>display: grid</code> con <code>grid-template-*</code> y <code>gap</code> es la base para las siguientes clases.
+    </div>
+
+    <h2>Próximos pasos (Clases 2–5)</h2>
+    <ol>
+        <li>Flexbox en profundidad: <code>flex-grow</code>, <code>flex-shrink</code>, <code>flex-basis</code>, orden y alineación por ítem.</li>
+        <li>Grid en profundidad: líneas, áreas con nombre, <code>grid-column</code> / <code>grid-row</code>, y patrones responsivos.</li>
+        <li>Patrones reales: cabecera, sidebar, footer y contenido principal con Grid y Flexbox.</li>
+        <li>Responsive: media queries, <code>auto-fill</code> / <code>auto-fit</code>, y combinación de ambos sistemas.</li>
+        <li>Proyecto integrador: maquetar una página completa aplicando todo lo aprendido.</li>
+    </ol>
+
+    <section class="quiz">
+        <h3>Comprueba lo aprendido</h3>
+        <p>¿Cuándo elegirías Flexbox y cuándo CSS Grid para un menú de navegación horizontal? ¿Y para una galería de imágenes en cuadrícula de 3 columnas?</p>
+        <p><small>Respuesta breve: menú en una fila → Flexbox. Galería en filas y columnas → CSS Grid.</small></p>
+    </section>
+
+</main>
+
+<footer>
+    <span>Clase 4 – CSS Grid & Flexbox Mastery</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
