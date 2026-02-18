@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 2 – Flexbox en profundidad (CSS Grid &amp; Flexbox)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 2 – Flexbox en profundidad</h1>
+    <p class="subtitle">Duración: 35–45 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: Flexbox en profundidad">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>En la clase 1 viste lo básico del contenedor flex: <code>display: flex</code>, <code>justify-content</code>, <code>align-items</code> y <code>gap</code>. Aquí vamos un paso más allá: aprenderás a controlar <strong>cada ítem por separado</strong> — cuánto puede crecer, cuánto puede encogerse, qué tamaño base tiene y en qué orden aparece. Con eso podrás montar navbars, filas de tarjetas y centrados que se adapten al espacio disponible.</p>
+        </section>
+
+        <section aria-labelledby="sec-crecer-encoger">
+            <h2 id="sec-crecer-encoger">flex-grow, flex-shrink y flex-basis</h2>
+            <p>Estas tres propiedades css pertenencientes a la familia de propiedades flexbox, se aplican a los <strong>ítems flex</strong> (los hijos del contenedor), no al contenedor. Deciden cómo se reparte el espacio sobrante o cómo se recorta cuando no hay suficiente.</p>
+            <ul>
+                <li><strong>flex-basis:</strong> El «tamaño base» del ítem antes de repartir espacio extra. Puede ser un valor como <code>200px</code>, <code>10rem</code> o <code>auto</code> (usa el ancho/alto del contenido). Si no lo pones, suele considerarse <code>auto</code>.</li>
+                <li><strong>flex-grow:</strong> Si sobra espacio en el eje principal, ¿cuánto de ese sobrante puede «tragar» este ítem? Por defecto es <code>0</code> (no crece). Si pones <code>1</code> en todos los ítems, se reparten el espacio a partes iguales. Si uno tiene <code>2</code> y los demás <code>1</code>, ese ítem crece el doble que los otros.</li>
+                <li><strong>flex-shrink:</strong> Si falta espacio y los ítems tienen que encogerse, ¿cuánto puede encogerse este? Por defecto es <code>1</code>. Con <code>0</code> el ítem no se encoge (puede provocar desborde).</li>
+            </ul>
+            <p>En la práctica, muchas veces quieres «que este ítem ocupe lo que quede»: por ejemplo el contenido principal. Ahí suele bastar <code>flex-grow: 1</code> (y opcionalmente <code>flex-basis: 0</code> para que el reparto sea puramente proporcional).</p>
+        </section>
+
+        <section aria-labelledby="sec-unidades">
+            <h2 id="sec-unidades">Unidades de medida en CSS</h2>
+            <p>Y ya que hemos visto valores como <code>px</code>, <code>rem</code> o <code>%</code> en los ejemplos, conviene repasar las <strong>unidades de medida</strong> que se usan en CSS. No hace falta memorizarlas todas; con tener clara la diferencia entre las más habituales te basta.</p>
+            <ul>
+                <li><strong>px (píxeles):</strong> Unidad fija ligada a la pantalla. Un <code>16px</code> es siempre el mismo tamaño en píxeles, pero en pantallas de alta densidad puede verse más pequeño. Sigue siendo muy usada para bordes, sombras o cuando quieres un valor exacto.</li>
+                <li><strong>rem:</strong> Relativa al tamaño de la fuente del elemento raíz (<code>html</code>). Por defecto en los navegadores, <code>1rem ≈ 16px</code>. Si el usuario cambia el tamaño de fuente del navegador, todo lo que uses en <code>rem</code> escala con él. Muy recomendable para <code>font-size</code>, márgenes y paddings.</li>
+                <li><strong>em:</strong> Relativa al <code>font-size</code> del propio elemento (o del padre). <code>1.5em</code> = 1,5 veces ese tamaño. Útil para espaciados que quieres que guarden proporción con el texto del bloque.</li>
+                <li><strong>% (porcentaje):</strong> Respecto al elemento padre (por ejemplo <code>width: 50%</code> = la mitad del ancho del contenedor). Depende de la propiedad: para anchos y altos suele ser respecto al padre; para fuentes, respecto al <code>font-size</code> del padre.</li>
+                <li><strong>vh y vw:</strong> Porcentaje del viewport (la ventana del navegador). <code>100vh</code> = toda la altura visible; <code>50vw</code> = la mitad del ancho. Útiles para pantallas completas o secciones a «altura de ventana».</li>
+                <li><strong>fr (fracción):</strong> Solo en CSS Grid. Representa una parte del espacio disponible (<code>1fr 1fr</code> = dos columnas iguales). En Flexbox no se usa; ahí el reparto lo hacen <code>flex-grow</code> y <code>flex-basis</code>.</li>
+            </ul>
+            <p>En resumen: para tamaños de texto y espaciado que escale con la accesibilidad, <code>rem</code>; para cosas que dependan del contenedor, <code>%</code>; para «toda la pantalla», <code>vh</code>/<code>vw</code>; y <code>px</code> cuando necesites un valor fijo.</p>
+            <aside class="highlight" role="note" aria-label="Advertencia sobre tamaños fijos">
+                <strong>Advertencia:</strong> Muchas veces nos veremos tentados a establecer tamaños fijos con <code>px</code> (anchos, altos, fuentes). Hay que tener en cuenta que en móviles las páginas suelen renderizarse peor cuando dependen de tamaños fijos: el contenido puede desbordar, el texto ser ilegible o los botones quedar cortados. Siempre que puedas, prioriza unidades relativas (<code>rem</code>, <code>%</code>, <code>vw</code>/<code>vh</code>) o flexibles (como <code>flex</code> y <code>minmax</code> en Grid) para que el diseño se adapte a distintas pantallas.
+            </aside>
+        </section>
+
+        <section aria-labelledby="sec-flex-shorthand">
+            <h2 id="sec-flex-shorthand">La propiedad shorthand: flex</h2>
+            <p>En lugar de escribir <code>flex-grow</code>, <code>flex-shrink</code> y <code>flex-basis</code> por separado, puedes usar <strong>flex</strong> con uno, dos o tres valores. El orden habitual es:</p>
+            <pre>flex: flex-grow flex-shrink flex-basis;</pre>
+            <p>Algunos ejemplos que verás mucho:</p>
+            <ul>
+                <li><code>flex: 1;</code> — Equivale a <code>flex: 1 1 0%</code>: el ítem puede crecer y encogerse, y su base es 0, así que reparte el espacio disponible por igual con otros ítems que también tengan <code>flex: 1</code>.</li>
+                <li><code>flex: 0 0 200px;</code> — No crece, no se encoge, y tiene 200px de base. Útil para sidebars o columnas de ancho fijo.</li>
+                <li><code>flex: auto;</code> — Equivale a <code>flex: 1 1 auto</code>: usa el tamaño del contenido como base y luego puede crecer o encogerse.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-order-align-self">
+            <h2 id="sec-order-align-self">order y align-self</h2>
+            <p>Dos propiedades más que se aplican a los ítems y te dan control fino sin tocar el HTML:</p>
+            <ul>
+                <li><strong>order:</strong> Define el orden visual de los ítems. Por defecto todos tienen <code>0</code>. Si a un ítem le pones <code>order: -1</code>, aparece antes que los que tienen 0; si le pones <code>order: 1</code>, aparece después. Útil para mover un elemento (por ejemplo un botón «Login») al final de la fila en desktop y al principio en móvil cambiando solo el CSS.</li>
+                <li><strong>align-self:</strong> Sobrescribe el <code>align-items</code> del contenedor solo para ese ítem. Valores: <code>auto</code>, <code>start</code>, <code>end</code>, <code>center</code>, <code>stretch</code>, <code>baseline</code>. Por ejemplo puedes tener la mayoría centrados y uno alineado al inicio o al final.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo-navbar">
+            <h2 id="sec-ejemplo-navbar">Ejemplo 1: Navbar (menú de navegación)</h2>
+            <p>Una barra con logo a la izquierda y enlaces a la derecha. El contenedor es flex; el logo no crece; los enlaces van en un <code>nav</code> que también es flex y tiene <code>gap</code>.</p>
+            <pre>.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.header .logo { flex: 0 0 auto; }
+.header nav {
+  display: flex;
+  gap: 1.5rem;
+}</pre>
+            <p><code>flex: 0 0 auto</code> en el logo hace que no crezca ni se encoja y que ocupe solo el espacio de su contenido. El <code>space-between</code> del contenedor separa logo y nav.</p>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo-cards">
+            <h2 id="sec-ejemplo-cards">Ejemplo 2: Tarjetas en fila</h2>
+            <p>Varias tarjetas del mismo ancho en una fila que se reparten el espacio. Cada tarjeta puede ser <code>flex: 1 1 0</code> (o <code>flex: 1</code>) para que todas tengan el mismo ancho y se adapten al contenedor.</p>
+            <pre>.tarjetas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.tarjetas .card {
+  flex: 1 1 200px; /* mínimo ~200px, luego se reparten */
+}</pre>
+            <p><code>flex-wrap: wrap</code> hace que si no caben todas en una fila, pasen a la siguiente. Con <code>flex: 1 1 200px</code> cada tarjeta tiene una base de 200px, crece si sobra espacio y se encoge si falta, así que en pantallas anchas verás varias en fila y en pantallas estrechas pueden apilarse.</p>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo-centrado">
+            <h2 id="sec-ejemplo-centrado">Ejemplo 3: Centrado perfecto (eje principal y transversal)</h2>
+            <p>Centrar un bloque en medio de la pantalla (o de un contenedor) es muy común. Con Flexbox en el contenedor:</p>
+            <pre>.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.contenedor .caja {
+  /* sin flex-grow para que la caja no se estire */
+}</pre>
+            <p>El contenedor ocupa al menos toda la altura de la ventana (<code>min-height: 100vh</code>). <code>justify-content: center</code> y <code>align-items: center</code> colocan el único hijo (o varios, en bloque) en el centro. Si quieres que la caja interior no crezca, no le pongas <code>flex-grow</code>; con eso se queda a su tamaño natural y centrada.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Resumen">
+            <strong>Resumen:</strong> En los ítems flex usa <code>flex-grow</code>, <code>flex-shrink</code> y <code>flex-basis</code> (o el shorthand <code>flex</code>) para repartir espacio; <code>order</code> para cambiar el orden visual; <code>align-self</code> para alinear un ítem distinto al resto. Con eso cubres navbar, tarjetas en fila y centrado sin depender de trucos antiguos.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Practica con un HTML tuyo: crea una barra de navegación con logo y tres enlaces usando Flexbox. Luego haz una fila de tres tarjetas que se repartan el ancho por igual (<code>flex: 1</code>). Por último, centra un div en medio de la página con <code>justify-content</code> y <code>align-items</code>.</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <h3>Flexbox</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/flex" target="_blank" rel="noopener noreferrer">flex (MDN)</a> — Referencia del shorthand y de grow/shrink/basis.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/CSS_layout/Flexbox" target="_blank" rel="noopener noreferrer">Flexbox – Aprende desarrollo web (MDN)</a> — Guía con ejercicios.</li>
+            </ul>
+            <h3>Unidades de medida</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/length" target="_blank" rel="noopener noreferrer">Valores de longitud &lt;length&gt; (MDN)</a> — Referencia de todas las unidades (px, em, rem, vh, vw, etc.) en español.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/sizing" target="_blank" rel="noopener noreferrer">Sizing – Learn CSS (web.dev)</a> — Artículo breve sobre unidades y cómo elegir el tamaño de los elementos.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/Values_and_units" target="_blank" rel="noopener noreferrer">Valores y unidades (MDN Learn)</a> — Parte del módulo «Fundamentos de estilos»; explica números, unidades y porcentajes de forma didáctica.</li>
+                <li><a class="resource-inline" href="https://www.youtube.com/watch?v=8UTMS3WTM0k" target="_blank" rel="noopener noreferrer">CSS Units of Measurement [rem, em, vw, vh, px, %] (YouTube)</a> — Video que repasa las unidades más usadas con ejemplos visuales.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 2 – CSS Grid & Flexbox Mastery</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
