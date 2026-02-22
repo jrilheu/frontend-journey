@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 3 – CSS Grid en profundidad (CSS Grid &amp; Flexbox)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 3 – CSS Grid en profundidad</h1>
+    <p class="subtitle">Duración: 20–30 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: CSS Grid en profundidad">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>En la clase 1 viste lo básico de Grid: <code>display: grid</code>, <code>grid-template-columns</code>, <code>grid-template-rows</code> y <code>gap</code>, con los ítems colocándose solos en orden. Aquí vamos a dar un paso más: aprenderás a <strong>colocar cada ítem donde tú quieras</strong> usando líneas y áreas, a definir columnas que se adapten al espacio con <code>minmax()</code> y <code>auto-fill</code>/<code>auto-fit</code>, y a aplicar todo eso en una galería y un mini dashboard.</p>
+        </section>
+
+        <section aria-labelledby="sec-lineas">
+            <h2 id="sec-lineas">Líneas de la cuadrícula y grid-column / grid-row</h2>
+            <p>Cuando defines filas y columnas, el navegador numera <strong>líneas</strong> (no las celdas). La primera línea vertical está a la izquierda de la primera columna; la siguiente entre la primera y la segunda columna, y así sucesivamente. Lo mismo para las filas: la línea 1 arriba, la 2 debajo de la primera fila, etc.</p>
+            <p>Con <strong>grid-column</strong> y <strong>grid-row</strong> indicas entre qué líneas va un ítem. Puedes usar números de línea o la forma abreviada <code>span</code> para «ocupar tantas celdas».</p>
+            <ul>
+                <li><code>grid-column: 1 / 3;</code> — El ítem va desde la línea 1 hasta la 3 (ocupa dos columnas).</li>
+                <li><code>grid-row: 2 / 4;</code> — Desde la línea 2 hasta la 4 (ocupa dos filas).</li>
+                <li><code>grid-column: 1 / span 2;</code> — Empieza en la línea 1 y abarca 2 columnas.</li>
+            </ul>
+            <p>También existen las propiedades largas <code>grid-column-start</code>, <code>grid-column-end</code>, <code>grid-row-start</code> y <code>grid-row-end</code>. El shorthand <code>grid-column: inicio / fin</code> es más cómodo para el día a día.</p>
+        </section>
+
+        <section aria-labelledby="sec-areas">
+            <h2 id="sec-areas">Áreas con nombre: grid-template-areas</h2>
+            <p>En lugar de pensar en números de línea, puedes dar <strong>nombres a zonas</strong> del grid y asignar cada ítem a una de esas zonas. Así el layout se lee de un vistazo.</p>
+            <p>En el contenedor defines la plantilla con <strong>grid-template-areas</strong>: escribes una «matriz» con strings, uno por fila. Cada nombre identifica una zona; si repites el mismo nombre en celdas consecutivas, forman un área rectangular. Los ítems hijos se colocan con la propiedad <strong>grid-area</strong> y el nombre de la zona.</p>
+            <pre>.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "cabecera cabecera cabecera"
+    "main     main     lateral"
+    "pie      pie      pie";
+}
+.cabecera { grid-area: cabecera; }
+.main     { grid-area: main; }
+.lateral  { grid-area: lateral; }
+.pie      { grid-area: pie; }</pre>
+            <p>El orden del HTML deja de importar para la posición: quien tenga <code>grid-area: lateral</code> irá a la zona «lateral» aunque en el código vaya el primero. Eso facilita maquetar cabecera, contenido, sidebar y footer sin tocar el DOM.</p>
+        </section>
+
+        <section aria-labelledby="sec-minmax">
+            <h2 id="sec-minmax">minmax() y columnas que se adaptan</h2>
+            <p>La función <strong>minmax(mínimo, máximo)</strong> define un tamaño entre un mínimo y un máximo. Muy útil en <code>grid-template-columns</code> o <code>grid-template-rows</code> para que las pistas crezcan o se encojan dentro de unos límites.</p>
+            <ul>
+                <li><code>grid-template-columns: minmax(200px, 1fr) 1fr;</code> — Primera columna: al menos 200px, como máximo una fracción del espacio; segunda columna una fracción. En pantallas estrechas la primera no se queda por debajo de 200px (salvo que el contenedor sea más pequeño).</li>
+                <li><code>grid-template-rows: auto minmax(100px, 1fr);</code> — La segunda fila tiene al menos 100px de alto y puede crecer para ocupar el resto.</li>
+            </ul>
+            <p>Combinando <code>minmax</code> con <code>repeat()</code> puedes hacer galerías donde cada celda tiene un tamaño mínimo pero se reparten el espacio sobrante.</p>
+        </section>
+
+        <section aria-labelledby="sec-autofill">
+            <h2 id="sec-autofill">auto-fill y auto-fit</h2>
+            <p>Dentro de <code>repeat()</code> puedes usar <strong>auto-fill</strong> o <strong>auto-fit</strong> en lugar de un número fijo de columnas. El navegador calcula cuántas columnas caben con el tamaño que indicas (por ejemplo <code>minmax(200px, 1fr)</code>) y crea esa cantidad de pistas.</p>
+            <ul>
+                <li><strong>auto-fill:</strong> Crea tantas columnas como quepan. Si sobra espacio, las columnas vacías siguen ocupando sitio (las pistas existen).</li>
+                <li><strong>auto-fit:</strong> Igual que auto-fill, pero si hay pistas vacías, se «colapsan» y el espacio sobrante se reparte entre las columnas que tienen contenido. Suele ser lo que quieres para una galería de ítems.</li>
+            </ul>
+            <pre>.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}</pre>
+            <p>Con esto no necesitas media queries para «cuántas columnas»: en pantallas anchas salen varias columnas; en móvil, una o dos según el ancho. Cambia <code>200px</code> por el tamaño mínimo que quieras para cada tarjeta o imagen.</p>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo-galeria">
+            <h2 id="sec-ejemplo-galeria">Ejemplo 1: Galería adaptable</h2>
+            <p>Una cuadrícula de fotos o tarjetas que se adapta al ancho sin breakpoints manuales:</p>
+            <pre>.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.galeria img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}</pre>
+            <p>Cada ítem tiene un mínimo de 180px; si el contenedor es más estrecho, baja el número de columnas. <code>object-fit: cover</code> hace que las imágenes rellenen la celda sin deformarse (puedes usar también <code>contain</code> si prefieres ver la imagen completa).</p>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo-dashboard">
+            <h2 id="sec-ejemplo-dashboard">Ejemplo 2: Mini dashboard con áreas</h2>
+            <p>Un panel con cabecera, bloque principal, sidebar y pie, usando <code>grid-template-areas</code>:</p>
+            <pre>.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header"
+    "content sidebar"
+    "footer footer";
+  min-height: 100vh;
+}
+.dashboard .header  { grid-area: header; }
+.dashboard .content { grid-area: content; }
+.dashboard .sidebar { grid-area: sidebar; }
+.dashboard .footer  { grid-area: footer; }</pre>
+            <p>La fila central (<code>1fr</code>) se expande para ocupar el espacio entre cabecera y footer. En móvil puedes, con una media query, cambiar a <code>grid-template-columns: 1fr;</code> y redefinir las áreas para que el sidebar quede debajo del contenido (por ejemplo una sola columna de áreas apiladas).</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Resumen">
+            <strong>Resumen:</strong> Usa <code>grid-column</code> y <code>grid-row</code> (o sus variantes start/end) para colocar ítems entre líneas; <code>grid-template-areas</code> y <code>grid-area</code> para layouts con nombres legibles; <code>minmax()</code> para tamaños flexibles con límites; y <code>repeat(auto-fit, minmax(...))</code> para galerías que se adaptan al ancho sin media queries. Con eso tienes la base para cualquier layout en Grid.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Practica: crea una cuadrícula de 3 columnas y coloca un ítem para que ocupe las dos primeras columnas de la primera fila (<code>grid-column</code>). Luego monta el mismo layout con <code>grid-template-areas</code> y <code>grid-area</code>. Por último, convierte una galería de tarjetas en <code>repeat(auto-fit, minmax(200px, 1fr))</code> y redimensiona la ventana para ver cómo cambia el número de columnas.</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <h3>Referencias (MDN)</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Guides/Grid_layout" target="_blank" rel="noopener noreferrer">Guía de Grid Layout (MDN)</a> — Conceptos, líneas, áreas y propiedades.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/grid-template-areas" target="_blank" rel="noopener noreferrer">grid-template-areas (MDN)</a> — Referencia y ejemplos de áreas con nombre.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/minmax" target="_blank" rel="noopener noreferrer">minmax() (MDN)</a> — Sintaxis y uso en Grid.</li>
+            </ul>
+            <h3>Contenido visual para apoyar la clase</h3>
+            <p>Estas páginas y videos complementan lo visto sobre líneas, áreas, <code>minmax()</code> y <code>auto-fit</code>:</p>
+            <ul>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/grid" target="_blank" rel="noopener noreferrer">Grid – Learn CSS (web.dev)</a> — Módulo de Grid con explicaciones y ejemplos; mismo estilo que el resto de Learn CSS que hemos usado en el módulo.</li>
+                <li><a class="resource-inline" href="https://gridbyexample.com/video/" target="_blank" rel="noopener noreferrer">Learn Grid Layout – Video series (Grid by Example, Rachel Andrew)</a> — Serie gratuita de videos cortos: <code>fr</code>, <code>repeat()</code>, <code>minmax()</code>, posicionamiento por líneas, <code>grid-template-areas</code>, <code>auto-fill</code>/<code>auto-fit</code>. Referencia clásica para profundizar.</li>
+                <li><a class="resource-inline" href="https://www.youtube.com/watch?v=bj0Z_GncIwY" target="_blank" rel="noopener noreferrer">Breakpoint-Free CSS Grid Layouts (YouTube)</a> — Muestra cómo usar <code>auto-fit</code> y <code>minmax()</code> para layouts responsive sin media queries, en línea con el ejemplo de galería de esta clase.</li>
+                <li><a class="resource-inline" href="https://www.youtube.com/watch?v=iDI-Yd-bmwc" target="_blank" rel="noopener noreferrer">How to use minmax() in CSS Grid (YouTube)</a> — Video centrado en la función <code>minmax()</code> con ejemplos visuales.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 3 – CSS Grid & Flexbox Mastery</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
