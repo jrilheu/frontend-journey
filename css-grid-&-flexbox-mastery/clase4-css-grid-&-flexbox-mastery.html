@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 4 – Patrones reales y responsive (CSS Grid &amp; Flexbox)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 4 – Patrones reales y responsive</h1>
+    <p class="subtitle">Duración: 40–50 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: patrones reales y diseño responsive con Grid y Flexbox">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>En las clases anteriores viste Flexbox y Grid por separado. Aquí vamos a <strong>juntarlos en un layout real</strong>: una página con cabecera, contenido principal, barra lateral y pie de página. Además, aprenderás a hacer ese layout <strong>responsive</strong> con media queries: cuándo pasar de varias columnas a una sola, cómo adaptar el menú en móvil y qué breakpoints usar. Es el paso previo al proyecto integrador de la clase 5.</p>
+        </section>
+
+        <section aria-labelledby="sec-patron-completo">
+            <h2 id="sec-patron-completo">Patrón clásico: header, main, aside, footer</h2>
+            <p>El esquema que vas a montar es muy habitual en blogs, dashboards y sitios corporativos:</p>
+            <ul>
+                <li><strong>Header:</strong> logo a la izquierda y menú en fila a la derecha → Flexbox con <code>justify-content: space-between</code>.</li>
+                <li><strong>Área central:</strong> main (contenido) + aside (sidebar) en dos columnas → Grid con <code>grid-template-columns: 1fr 280px</code> o <code>minmax()</code>.</li>
+                <li><strong>Footer:</strong> varias columnas (enlaces, contacto, redes) → Flexbox o Grid según prefieras.</li>
+            </ul>
+            <p>Todo el layout puede ir dentro de un contenedor con <code>display: grid</code> y <code>grid-template-rows: auto 1fr auto</code> (cabecera, zona central flexible, footer). La zona central es otro grid o flex para main + aside.</p>
+            <pre>.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.contenido {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 2rem;
+}</pre>
+        </section>
+
+        <section aria-labelledby="sec-media-queries">
+            <h2 id="sec-media-queries">Media queries: el punto de corte</h2>
+            <p>Las <strong>media queries</strong> permiten aplicar estilos distintos según el ancho de la pantalla (o otras condiciones). La sintaxis básica es:</p>
+            <pre>@media (max-width: 768px) {
+  /* estilos que solo aplican cuando el ancho es ≤ 768px */
+}
+@media (min-width: 769px) {
+  /* estilos para pantallas más anchas */
+}</pre>
+            <p><strong>max-width</strong> significa «cuando la ventana es como máximo X píxeles» (móvil y tablet). <strong>min-width</strong> significa «cuando la ventana es al menos X píxeles» (desktop). Lo habitual es escribir primero los estilos base (móvil) y luego, con <code>min-width</code>, ir añadiendo el layout de pantallas grandes (enfoque «mobile first»).</p>
+            <h3>Breakpoints típicos</h3>
+            <p>No existe un estándar único; depende del diseño. Valores muy usados (en píxeles):</p>
+            <ul>
+                <li><code>576px</code> — móviles grandes / phablets</li>
+                <li><code>768px</code> — tablets en vertical</li>
+                <li><code>992px</code> — tablets en horizontal / pantallas pequeñas</li>
+                <li><code>1200px</code> — escritorio</li>
+            </ul>
+            <p>Muchos proyectos usan solo uno o dos breakpoints (por ejemplo 768px y 1024px). Empieza con uno y añade más si el diseño lo pide.</p>
+        </section>
+
+        <section aria-labelledby="sec-responsive-layout">
+            <h2 id="sec-responsive-layout">Hacer el layout responsive</h2>
+            <p>En móvil suele interesar que main y sidebar se apilen en una sola columna, y que el sidebar quede debajo del contenido. Con el grid de áreas que vimos en la clase 3, basta con redefinir las áreas y las columnas en la media query:</p>
+            <pre>.contenido {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-areas: "main sidebar";
+}
+@media (max-width: 768px) {
+  .contenido {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "main"
+      "sidebar";
+  }
+}</pre>
+            <p>Los ítems con <code>grid-area: main</code> y <code>grid-area: sidebar</code> pasan automáticamente a la nueva disposición. No hace falta tocar el HTML.</p>
+        </section>
+
+        <section aria-labelledby="sec-menu-adaptable">
+            <h2 id="sec-menu-adaptable">Menú adaptable: de fila a columna o hamburguesa</h2>
+            <p>En desktop el menú va en fila (Flexbox). En móvil hay varias opciones:</p>
+            <ul>
+                <li><strong>Apilar en columna:</strong> Cambiar el contenedor del menú a <code>flex-direction: column</code> y centrarlo. Los enlaces quedan uno debajo de otro.</li>
+                <li><strong>Ocultar y mostrar con botón «hamburguesa»:</strong> En móvil el menú está oculto (<code>display: none</code> o fuera de pantalla). Un botón abre/cierra el menú. Eso ya implica un poco de JavaScript para alternar una clase; el CSS solo define cómo se ve abierto y cerrado.</li>
+            </ul>
+            <p>Para empezar, la opción más simple es la columna: sin JavaScript, solo cambiar <code>flex-direction</code> en la media query. Si además quieres que el header no sea una fila sino una pila (logo arriba, menú abajo), puedes hacer el header también en columna:</p>
+            <pre>@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .header nav {
+    flex-direction: column;
+  }
+}</pre>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo">
+            <strong>Consejo:</strong> Usa las herramientas de desarrollador del navegador (F12) en modo «responsive» o «toggle device» para ver cómo cambia tu layout al redimensionar. Así compruebas los breakpoints sin tener que cambiar el tamaño de la ventana a mano.
+        </aside>
+
+        <section aria-labelledby="sec-ejemplo-completo">
+            <h2 id="sec-ejemplo-completo">Ejemplo: layout completo con breakpoint</h2>
+            <p>Un esqueleto que une todo lo anterior. Estilos base para desktop; media query para móvil:</p>
+            <pre>/* Base: desktop */
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.contenido {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-areas: "main sidebar";
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+.main   { grid-area: main; }
+.sidebar { grid-area: sidebar; }
+
+/* Móvil */
+@media (max-width: 768px) {
+  .header { flex-direction: column; }
+  .contenido {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main" "sidebar";
+  }
+}</pre>
+        </section>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Monta una página con header (logo + menú en Flexbox), main + sidebar en Grid, y footer. Luego añade una media query para que en pantallas ≤ 768px el sidebar pase debajo del main y el header se convierta en columna. Redimensiona la ventana o usa el modo responsive del navegador para comprobar que los cambios se aplican bien.</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Media_Queries" target="_blank" rel="noopener noreferrer">Media queries (MDN)</a> — Sintaxis, condiciones y ejemplos.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/design/welcome" target="_blank" rel="noopener noreferrer">Learn Responsive Design (web.dev)</a> — Curso de diseño responsive con media queries, layouts y ejemplos.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 4 – CSS Grid & Flexbox Mastery</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
