@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 5 – Proyecto integrador (CSS Grid &amp; Flexbox)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 5 – Proyecto integrador</h1>
+    <p class="subtitle">Duración: 45–60 minutos (o más si te enganchas)</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: proyecto integrador con Grid y Flexbox">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Has llegado al cierre del módulo. En las clases 1 a 4 viste las bases de CSS, Flexbox y Grid, las propiedades avanzadas, los patrones con áreas y el diseño responsive. En esta clase vas a <strong>aplicar todo junto</strong>: maquetar una página completa usando Grid para la estructura general y Flexbox donde encaje (cabecera, menú, footer), con al menos un breakpoint para móvil. No hace falta que sea un sitio real con contenido; puede ser un prototipo con bloques o texto de relleno. Lo importante es que tú decidas el layout, lo montes con CSS y veas cómo Flexbox y Grid trabajan en el mismo diseño.</p>
+        </section>
+
+        <section aria-labelledby="sec-estructura">
+            <h2 id="sec-estructura">Estructura de la página que vas a maquetar</h2>
+            <p>Te proponemos el mismo esquema que practicaste en la clase 4, para que lo lleves hasta el final:</p>
+            <ul>
+                <li><strong>Cabecera (header):</strong> logo o título a la izquierda y menú de navegación en una fila a la derecha. Flexbox con <code>justify-content: space-between</code> y <code>align-items: center</code>.</li>
+                <li><strong>Contenido principal (main) + barra lateral (aside):</strong> dos columnas — una más ancha para el contenido y otra para el sidebar. Grid con <code>grid-template-columns: 1fr 280px</code> (o <code>minmax(200px, 280px)</code> para el sidebar). Puedes usar <code>grid-template-areas</code> para dar nombres a las zonas.</li>
+                <li><strong>Pie de página (footer):</strong> varias columnas (por ejemplo «Enlaces», «Contacto», «Redes») en una fila. Flexbox con <code>justify-content: space-around</code> o Grid con <code>repeat(3, 1fr)</code>.</li>
+            </ul>
+            <p>Todo puede vivir dentro de un contenedor (por ejemplo <code>.layout</code>) con <code>display: grid</code> y <code>grid-template-rows: auto 1fr auto</code>, de modo que la cabecera y el footer ocupen solo su altura y la zona central se expanda. Si prefieres algo más simple al principio, haz solo cabecera + contenido ancho completo + footer; luego añades la barra lateral.</p>
+        </section>
+
+        <section aria-labelledby="sec-pasos">
+            <h2 id="sec-pasos">Pasos sugeridos</h2>
+            <ol>
+                <li><strong>Escribe el HTML primero.</strong> Usa etiquetas semánticas: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>. Dentro, pon texto de relleno o divs con clase (por ejemplo <code>.logo</code>, <code>.menu</code>, <code>.content</code>).</li>
+                <li><strong>Dale al layout principal estructura con Grid.</strong> Un contenedor con <code>display: grid</code>, <code>grid-template-rows: auto 1fr auto</code> y <code>min-height: 100vh</code>. Así tienes las tres franjas: cabecera, contenido central, footer.</li>
+                <li><strong>La zona central (main + aside)</strong> puede ser otro grid: <code>grid-template-columns: 1fr 280px</code> y, si quieres, <code>grid-template-areas</code> con nombres como <code>main</code> y <code>sidebar</code>. Asigna cada ítem con <code>grid-area</code>.</li>
+                <li><strong>Cabecera y footer:</strong> <code>display: flex</code>, <code>align-items: center</code>, y <code>justify-content: space-between</code> (o <code>space-around</code> en el footer) para repartir logo, menú y columnas del pie.</li>
+                <li><strong>Responsive:</strong> Con una media query (por ejemplo <code>max-width: 768px</code>), cambia a una sola columna en la zona central (<code>grid-template-columns: 1fr</code> y redefine las áreas para que el sidebar quede debajo del main). Opcional: que el header pase a <code>flex-direction: column</code> en móvil.</li>
+            </ol>
+        </section>
+
+        <section aria-labelledby="sec-ejemplo">
+            <h2 id="sec-ejemplo">Ejemplo mínimo de estructura</h2>
+            <p>Puedes usar este esqueleto como punto de partida y luego personalizarlo:</p>
+            <pre>.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+.contenido-principal {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-areas: "main sidebar";
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+.main   { grid-area: main; }
+.sidebar { grid-area: sidebar; }
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; }
+  .contenido-principal {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main" "sidebar";
+  }
+}</pre>
+            <p>El contenedor <code>.layout</code> define las tres franjas; la cabecera y el footer usan Flexbox; el bloque central usa Grid para main + sidebar. La media query adapta el layout a pantallas estrechas. A partir de aquí puedes añadir colores, tipografía, márgenes y el contenido HTML que quieras.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo">
+            <strong>Consejo:</strong> Si algo no cuadra, abre las herramientas de desarrollador del navegador (presionando F12 en tu navegador) y revisa cómo se aplican <code>display: grid</code> y <code>display: flex</code> en cada contenedor. Inspeccionar los ítems y las líneas del grid ayuda mucho a depurar.
+        </aside>
+
+        <section aria-labelledby="sec-checklist">
+            <h2 id="sec-checklist">Comprueba lo que has hecho</h2>
+            <p>Cuando termines, repasa con esta lista:</p>
+            <ul>
+                <li>¿Usaste <strong>Grid</strong> para la estructura general (tres franjas) o para la zona main + sidebar?</li>
+                <li>¿Usaste <strong>Flexbox</strong> para la cabecera, el menú o el footer?</li>
+                <li>¿El HTML es semántico (<code>header</code>, <code>main</code>, <code>nav</code>, <code>aside</code>, <code>footer</code>)?</li>
+                <li>¿Añadiste al menos un breakpoint para que en pantallas pequeñas el layout cambie (por ejemplo sidebar debajo del main)?</li>
+            </ul>
+            <p>No hace falta que quede perfecto a la primera. El objetivo es que experimentes combinando ambos sistemas y que te quedes con una página de referencia que puedas seguir mejorando (más secciones, galería con <code>auto-fit</code>, menú hamburguesa con JavaScript, etc.).</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Para seguir practicando</h2>
+            <p>Si quieres repasar o profundizar antes de dar por cerrado el módulo:</p>
+            <h3>Referencias</h3>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Guides/Grid_layout" target="_blank" rel="noopener noreferrer">Guía de Grid Layout (MDN)</a> — Áreas, líneas y patrones.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/CSS_layout/Flexbox" target="_blank" rel="noopener noreferrer">Flexbox (MDN Learn)</a> — Propiedades del contenedor y de los ítems.</li>
+            </ul>
+            <h3>Videos que apoyan el proyecto integrador (español)</h3>
+            <p>Estos videos están en español y montan una página completa con Grid y Flexbox o explican Flexbox desde cero. Puedes verlos aquí o abrirlos en YouTube:</p>
+
+            <h4>Curso de CSS Flexbox desde cero (freeCodeCamp Español)</h4>
+            <p>Curso completo de Flexbox en español: fundamentos, propiedades (<code>flex-direction</code>, <code>justify-content</code>, <code>align-items</code>, etc.), diseños responsivos y comparación Flexbox vs Grid.</p>
+            <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/iwFEc6I8wSA" title="Curso CSS Flexbox desde cero - freeCodeCamp Español" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=iwFEc6I8wSA" target="_blank" rel="noopener noreferrer" class="video-pill">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Abrir en YouTube
+            </a>
+
+            <h4>Crea una página web responsive con HTML y CSS (freeCodeCamp Español)</h4>
+            <p>Construcción paso a paso de una página responsive sin frameworks: maquetado HTML, estilos para móvil y escritorio, Flexbox y buenas prácticas. Muy alineado con el proyecto integrador.</p>
+            <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/VgHproadDD8" title="Página web responsive con HTML y CSS - freeCodeCamp Español" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=VgHproadDD8" target="_blank" rel="noopener noreferrer" class="video-pill">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Abrir en YouTube
+            </a>
+
+            <h4>Página web completa con HTML y CSS desde cero – Full responsive</h4>
+            <p>Tutorial en español para crear una página moderna y responsive solo con HTML y CSS (sin frameworks): navegación, secciones y adaptación a distintos dispositivos.</p>
+            <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/8-RC-Q7Wtzc" title="Página web completa HTML y CSS desde cero - Full responsive" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=8-RC-Q7Wtzc" target="_blank" rel="noopener noreferrer" class="video-pill">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Abrir en YouTube
+            </a>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 5 – CSS Grid & Flexbox Mastery</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
