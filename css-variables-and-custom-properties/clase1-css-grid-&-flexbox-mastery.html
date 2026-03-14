@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 1 – Introducción a las variables CSS (CSS Variables &amp; Custom Properties)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 1 – Introducción a las variables CSS</h1>
+    <p class="subtitle">Duración:15–25 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: variables CSS (custom properties)">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Las <strong>variables CSS</strong> (en la documentación las verás como <strong>custom properties</strong>) te permiten guardar un valor —un color, un tamaño, una duración— con un nombre y reutilizarlo en todo tu CSS. Así dejas de repetir el mismo valor por todas partes y, cuando quieras cambiar algo (por ejemplo el color principal de la página), solo tocas un sitio. En esta primera clase verás la sintaxis, dónde declararlas, cómo usarlas y cómo se heredan. No hace falta memorizar todo; con practicar un poco se queda solo.</p>
+        </section>
+
+        <section aria-labelledby="sec-que-son">
+            <h2 id="sec-que-son">¿Qué son las variables CSS (custom properties)?</h2>
+            <p>Son propiedades que <em>tú</em> inventas: les pones un nombre que empieza por <code>--</code> y un valor. El navegador no les da un significado especial (no son como <code>color</code> o <code>margin</code>); solo guardan ese valor. Luego, donde necesites usarlo, escribes <code>var(--nombre)</code> y el navegador lo sustituye. Por ejemplo: si defines <code>--color-principal: #00f5d4;</code> y en varios sitios pones <code>color: var(--color-principal);</code>, cuando cambies <code>--color-principal</code> en un solo lugar, todo lo que use esa variable se actualiza.</p>
+            <p>Vienen muy bien para temas (colores, fuentes), espaciados que quieras mantener coherentes y cualquier valor que se repita. Esta misma página que estás leyendo usa variables para el fondo, los acentos y el texto: si abres las herramientas de desarrollador y miras el CSS, verás un bloque <code>:root</code> al inicio con varias <code>--nombre</code>. Eso es justo lo que estamos viendo.</p>
+        </section>
+
+        <section aria-labelledby="sec-sintaxis">
+            <h2 id="sec-sintaxis">Sintaxis: declarar y usar</h2>
+            <p>Para <strong>declarar</strong> una variable escribes el nombre (siempre con los dos guiones delante) y el valor, igual que cualquier otra propiedad CSS:</p>
+            <pre>--nombre-variable: valor;</pre>
+            <p>El nombre puede llevar guiones, por ejemplo <code>--color-boton</code>. El valor puede ser un color, una longitud, un número, un texto o incluso otra variable (usando <code>var()</code>).</p>
+            <p>Para <strong>usar</strong> la variable usas la función <code>var()</code>:</p>
+            <pre>propiedad: var(--nombre-variable);</pre>
+            <p>Un ejemplo que puedes copiar y probar:</p>
+            <pre>:root {
+  --color-principal: #00f5d4;
+  --espaciado: 1rem;
+}
+.boton {
+  background: var(--color-principal);
+  padding: var(--espaciado) 1.5rem;
+}</pre>
+            <p>Si en ese momento la variable no está definida (porque te equivocaste de nombre o la borraste), la propiedad no se aplica. Más abajo verás que puedes dar un valor de respaldo por si acaso.</p>
+        </section>
+
+        <section aria-labelledby="sec-donde">
+            <h2 id="sec-donde">Dónde declarar las variables</h2>
+            <p>Puedes declarar variables en <strong>cualquier selector</strong>. Lo importante es que <strong>solo están disponibles en ese elemento y en sus hijos</strong> (eso se llama ámbito o scope). Según donde las pongas, cambia quién puede usarlas.</p>
+            <ul>
+                <li><strong>:root</strong> — Es el elemento raíz de la página (<code>&lt;html&gt;</code>). Las variables que definas aquí están disponibles en toda la página. Es el sitio más habitual para colores, fuentes y todo lo que quieras que sea «global».</li>
+                <li><strong>En un selector de clase o de elemento</strong> — Por ejemplo <code>.card { --borde: 2px solid blue; }</code>. Esa variable solo existe dentro de los elementos con clase <code>card</code> y sus hijos. Sirve para que un componente (como una tarjeta) tenga sus propios valores sin repetir el mismo borde en veinte reglas.</li>
+            </ul>
+            <p>Si declaras la misma variable en <code>:root</code> y también dentro de <code>.card</code>, dentro de cada tarjeta gana la versión de <code>.card</code>. Así puedes «sobrescribir» el tema solo en una parte de la página sin tocar el resto.</p>
+        </section>
+
+        <section aria-labelledby="sec-fallback">
+            <h2 id="sec-fallback">Valor de respaldo (fallback)</h2>
+            <p>La función <code>var()</code> puede llevar un segundo valor: el que se usará si la variable no existe (o si el navegador no soporta custom properties):</p>
+            <pre>color: var(--color-texto, #333);</pre>
+            <p>Si <code>--color-texto</code> está definida, se usa; si no, se usa <code>#333</code>. El respaldo puede ser otra variable, por ejemplo <code>var(--color-texto, var(--gris-oscuro))</code>. Así te aseguras de que la página siga viéndose bien aunque falte una variable o alguien use un navegador muy antiguo.</p>
+        </section>
+
+        <section aria-labelledby="sec-herencia">
+            <h2 id="sec-herencia">Herencia</h2>
+            <p>Las variables CSS se <strong>heredan</strong>. Si defines <code>--mi-color: red;</code> en <code>body</code>, todos los elementos dentro de <code>body</code> pueden usar <code>var(--mi-color)</code>. Si en un hijo (por ejemplo un <code>div</code> con clase <code>.caja</code>) vuelves a declarar <code>--mi-color: blue;</code>, ese <code>div</code> y todo lo que lleve dentro verá <code>blue</code>; el resto de la página sigue con <code>red</code>. Con la práctica verás que eso permite hacer temas por sección o por componente sin duplicar reglas.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Resumen">
+            <strong>Resumen:</strong> Declaras con <code>--nombre: valor;</code> en <code>:root</code> (global) o en cualquier selector (solo para ese elemento y sus hijos). Usas con <code>var(--nombre)</code> o <code>var(--nombre, valor-de-respaldo)</code>. Se heredan, así que los hijos pueden usar las del padre o redefinirlas. En la clase 2 veremos temas (claro/oscuro), usar variables con <code>calc()</code> y algunas buenas prácticas.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>En un archivo CSS tuyo (o en un <code>&lt;style&gt;</code> de prueba), define en <code>:root</code> dos variables: un color, por ejemplo <code>--color-destacado</code>, y un espaciado, por ejemplo <code>--gap</code>. Úsalas en un par de reglas: por ejemplo un <code>.contenedor</code> con <code>gap: var(--gap)</code> y un <code>.destacado</code> con <code>color: var(--color-destacado)</code>. Luego cambia el valor de una de las variables y comprueba que los estilos se actualizan solos. Con eso ya has cerrado el círculo de esta clase.</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener noreferrer">Usando las propiedades personalizadas CSS (MDN)</a> — Guía en español: sintaxis, herencia y ejemplos.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/custom-properties/" target="_blank" rel="noopener noreferrer">Custom properties (web.dev)</a> — Lección breve con ejemplos prácticos.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 1 – CSS Variables &amp; Custom Properties</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
