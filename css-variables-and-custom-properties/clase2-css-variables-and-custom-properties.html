@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 2 – Temas, calc() y buenas prácticas (CSS Variables &amp; Custom Properties)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 2 – Temas, calc() y buenas prácticas</h1>
+    <p class="subtitle">Duración: 30–40 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: temas, calc y buenas prácticas con variables CSS">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>En la clase 1 viste cómo declarar variables, usar <code>var()</code> y entender el ámbito y la herencia. Aquí vamos un paso más: montar un <strong>tema</strong> (por ejemplo claro y oscuro), combinar variables con <strong><code>calc()</code></strong> para calcular tamaños, y algunas <strong>buenas prácticas</strong> de nombres y organización. Con esto cierras el módulo de variables CSS con herramientas que verás en proyectos reales.</p>
+        </section>
+
+        <section aria-labelledby="sec-temas">
+            <h2 id="sec-temas">Temas: claro, oscuro y preferencia del sistema</h2>
+            <p>Un <strong>tema</strong> es un conjunto de valores (colores de fondo, texto, bordes, etc.) que definen el aspecto de la página. Con variables en <code>:root</code> puedes tener un tema «por defecto» y cambiar solo las variables para pasar a otro tema sin tocar el resto del CSS.</p>
+            <h3>Opción 1: clase en el <code>&lt;html&gt;</code> o <code>&lt;body&gt;</code></h3>
+            <p>Al usuario le das un botón «Modo oscuro» que añade o quita una clase (por ejemplo <code>theme-dark</code>) en <code>document.documentElement</code> o en <code>body</code>. En el CSS redefines las variables cuando esa clase está presente:</p>
+            <pre>:root {
+  --color-fondo: #ffffff;
+  --color-texto: #1a1a1a;
+}
+.theme-dark {
+  --color-fondo: #0a0e27;
+  --color-texto: #e8f1f5;
+}
+body {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}</pre>
+            <p>Tus reglas siguen usando <code>var(--color-fondo)</code> y <code>var(--color-texto)</code>; solo cambian los valores de las variables cuando el <code>body</code> (o el <code>html</code>) tiene la clase de tema oscuro. Para alternar la clase con un botón hace falta un poco de JavaScript (o puedes usar solo CSS con la opción siguiente).</p>
+            <h3>Opción 2: preferencia del sistema con <code>prefers-color-scheme</code></h3>
+            <p>Si quieres respetar el modo claro u oscuro que el usuario ya eligió en el sistema operativo, puedes usar una media query:</p>
+            <pre>@media (prefers-color-scheme: dark) {
+  :root {
+    --color-fondo: #0a0e27;
+    --color-texto: #e8f1f5;
+  }
+}</pre>
+            <p>Así no hace falta botón: el navegador aplica el bloque cuando el usuario tiene preferencia por oscuro. Puedes combinar ambas cosas: tema por defecto con <code>prefers-color-scheme</code> y un botón que añade <code>theme-dark</code> para sobrescribir manualmente.</p>
+        </section>
+
+        <section aria-labelledby="sec-calc">
+            <h2 id="sec-calc">Variables y <code>calc()</code></h2>
+            <p>La función <strong><code>calc()</code></strong> permite hacer operaciones matemáticas en CSS (sumar, restar, multiplicar, dividir). Se combina muy bien con variables: por ejemplo, quieres que un ancho sea «el tamaño base menos un margen».</p>
+            <pre>:root {
+  --ancho-max: 900px;
+  --margen-lateral: 2rem;
+}
+.contenido {
+  max-width: calc(var(--ancho-max) - 2 * var(--margen-lateral));
+}</pre>
+            <p>Importante: al escribir <code>calc()</code>, deja espacios alrededor de los operadores (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) para que el navegador no se confunda. También puedes usar <code>calc()</code> con <code>100%</code> y <code>var()</code> para layouts responsive, por ejemplo <code>width: calc(100% - var(--sidebar));</code>.</p>
+            <p>Si en la clase 2 del módulo de flexbox viste unidades como <code>rem</code>, recuerda: puedes guardar un <code>rem</code> en una variable y usarlo dentro de <code>calc()</code> para espaciados coherentes en todo el sitio.</p>
+        </section>
+
+        <section aria-labelledby="sec-buenas-practicas">
+            <h2 id="sec-buenas-practicas">Buenas prácticas (nombres y organización)</h2>
+            <ul>
+                <li><strong>Nombres que describan el rol, no el valor literal:</strong> Mejor <code>--color-texto-principal</code> que <code>--gris</code>, porque si mañana cambias el color a azul, el nombre sigue teniendo sentido.</li>
+                <li><strong>Prefijo común:</strong> Muchos proyectos usan <code>--color-</code>, <code>--space-</code>, <code>--font-</code> para agrupar mentalmente y buscar en el editor.</li>
+                <li><strong>Variables «semánticas» de alto nivel:</strong> Por ejemplo <code>--color-superficie</code> y <code>--color-texto</code> que apuntan a valores concretos; si cambias el tema, solo cambias esas asignaciones en un sitio.</li>
+                <li><strong>Comentarios en el CSS:</strong> Un bloque al inicio del archivo con la lista de variables del tema ayuda a quien llegue después (o a ti dentro de seis meses).</li>
+            </ul>
+            <p>No hace falta aplicar todo desde el primer día: empieza con pocas variables en <code>:root</code> y ve añadiendo cuando veas repetición o cuando quieras cambiar de tema fácilmente.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Resumen">
+            <strong>Resumen:</strong> Los temas se suelen cambiar redefiniendo variables en <code>.theme-dark</code>, en <code>@media (prefers-color-scheme: dark)</code> o ambos. Con <code>calc()</code> puedes combinar variables y valores fijos para obtener medidas flexibles. Nombres claros y un bloque de variables documentado hacen el mantenimiento mucho más sencillo.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Prueba A: define en <code>:root</code> <code>--color-fondo</code> y <code>--color-texto</code> para un tema claro; luego añade una media query <code>prefers-color-scheme: dark</code> con otros valores para esas mismas variables. Cambia el modo de tu sistema (o del simulador en DevTools) y comprueba que el fondo y el texto cambian.</p>
+            <p>Prueba B: define <code>--base: 1rem;</code> y usa <code>padding: calc(var(--base) * 2);</code> en un contenedor. Cambia <code>--base</code> y observa cómo el padding escala.</p>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/calc" target="_blank" rel="noopener noreferrer">calc() (MDN)</a> — Sintaxis y ejemplos.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/@media/prefers-color-scheme" target="_blank" rel="noopener noreferrer">prefers-color-scheme (MDN)</a> — Modo claro y oscuro según preferencias del usuario.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/theming/" target="_blank" rel="noopener noreferrer">Theming (web.dev)</a> — Temas con custom properties.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 2 – CSS Variables &amp; Custom Properties</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
