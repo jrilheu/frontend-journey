@@ -343,6 +343,21 @@
 /* Navegadores recientes: @media (min-width: var(--bp-md)) { ... } */</pre>
         </section>
 
+        <section aria-labelledby="sec-unidades-recuerdo">
+            <h2 id="sec-unidades-recuerdo">Recordatorio: unidades en esta lección</h2>
+            <p>En los ejemplos y textos de <strong>este archivo</strong> aparecen estas unidades y formas de medir. Sirve como guía rápida antes de entrar en componentes:</p>
+            <ul>
+                <li><strong><code>px</code> (píxeles):</strong> unidad fija respecto al píxel de la pantalla. La usamos sobre todo en <strong>media queries</strong> (<code>min-width: 768px</code>), en los rangos orientativos de breakpoints (480px, 1024px…) y en valores concretos de diseño en los snippets (por ejemplo <code>border-radius: 12px</code> o <code>minmax(240px, 1fr)</code>).</li>
+                <li><strong><code>rem</code>:</strong> relativo al tamaño de fuente del elemento raíz (<code>html</code>). Aparece en márgenes y rellenos de componentes (<code>padding: 1rem</code>, <code>gap: 1.5rem</code>), en <code>max-width: 28rem</code> y dentro de <code>clamp()</code> para tipografía. Es cómoda para responsive y accesibilidad.</li>
+                <li><strong><code>em</code>:</strong> relativa al tamaño de fuente del <strong>elemento padre</strong>. En la propia hoja de estilos de esta página se usa en tamaños de <code>code</code> anidados; en la parte teórica nos centramos más en <code>rem</code>.</li>
+                <li><strong><code>%</code> (porcentaje):</strong> relativa al contenedor de referencia (según la propiedad). En el contenido la mencionamos con <code>width: 100%</code> para que un bloque use todo el ancho disponible del padre.</li>
+                <li><strong><code>vw</code> (viewport width):</strong> 1<code>vw</code> = 1% del ancho del viewport. La combinamos con <code>rem</code> dentro de <code>clamp()</code> para que el <code>font-size</code> crezca o encoja al redimensionar la ventana.</li>
+                <li><strong><code>ch</code>:</strong> ancho aproximado del carácter “0” de la fuente actual. La citamos para limitar el ancho de párrafos (<code>max-width</code> en <code>ch</code>) y mejorar la lectura (unas 45–75 <code>ch</code>).</li>
+                <li><strong><code>fr</code> (fracción, Grid):</strong> reparte el espacio libre en una cuadrícula. Aparece en <code>repeat(auto-fit, minmax(240px, 1fr))</code>: cada columna tiene al menos 240px y el resto se reparte en fracciones iguales.</li>
+            </ul>
+            <p><strong><code>clamp()</code></strong> no es una unidad, sino una <strong>función</strong> que devuelve un valor con límites (mínimo, preferido, máximo); en los ejemplos de tipografía mezcla <code>rem</code> y <code>vw</code>.</p>
+        </section>
+
         <section aria-labelledby="sec-componentes">
             <h2 id="sec-componentes">Componentes responsive</h2>
             <p>Un <strong>componente</strong> es un bloque reutilizable (tarjeta, cabecera, lista de productos, pie de página). En responsive conviene que cada componente:</p>
@@ -355,6 +370,23 @@
             <p>En móvil: una columna (<code>flex-direction: column</code> o un solo track en Grid). A partir de <code>min-width: 768px</code>: varias columnas con <code>flex-wrap</code> o <code>grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))</code> para que el número de columnas dependa del espacio.</p>
             <div class="highlight">
                 <strong>Regla práctica:</strong> si copias y pegas el mismo bloque HTML con clases distintas solo para móvil/desktop, considera un solo componente y media queries (o clases de utilidad) sobre el mismo marcado.
+                <p><strong>Ejemplo:</strong> una sola tarjeta en el HTML; el salto de móvil a escritorio vive en el CSS.</p>
+                <pre>&lt;article class="tarjeta"&gt;
+  &lt;h3&gt;Título&lt;/h3&gt;
+  &lt;p&gt;Descripción corta del contenido.&lt;/p&gt;
+&lt;/article&gt;
+
+.tarjeta {
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+@media (min-width: 768px) {
+  .tarjeta {
+    padding: 1.5rem;
+    max-width: 28rem;
+  }
+}</pre>
             </div>
         </section>
 
