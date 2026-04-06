@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 3 – Layouts responsive con Grid y Flexbox</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 3 – Layouts responsive con Grid y Flexbox</h1>
+    <p class="subtitle">Duración: 35–45 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: layouts responsive con Grid y Flexbox">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Ya tienes mobile-first, breakpoints y componentes con tipografía fluida. Aquí el foco es <strong>organizar bloques en la página</strong> con las dos herramientas estándar del CSS moderno: <strong>Flexbox</strong> y <strong>CSS Grid</strong>. Verás cuándo conviene cada una, propiedades clave y <strong>patrones reales</strong> (cabecera, contenido principal, barra lateral, grillas de tarjetas) que escalan de móvil a escritorio.</p>
+        </section>
+
+        <section aria-labelledby="sec-flex-vs-grid">
+            <h2 id="sec-flex-vs-grid">Flexbox o Grid: regla práctica</h2>
+            <p>Ambos sirven para layout; la diferencia está en el tipo de problema:</p>
+            <ul>
+                <li><strong>Flexbox</strong> es ideal para <strong>una dimensión dominante</strong>: filas o columnas de elementos que deben alinearse, repartirse el espacio o envolver (<code>wrap</code>). Piensa en barras de navegación, grupos de botones, filas de iconos o centrar un bloque en el eje que elijas.</li>
+                <li><strong>Grid</strong> brilla cuando necesitas una <strong>cuadrícula en dos dimensiones</strong>: filas y columnas a la vez, áreas con nombre, o columnas que se repiten y se adaptan al ancho (<code>auto-fit</code> / <code>minmax</code>).</li>
+            </ul>
+            <p>En proyectos reales se combinan: por ejemplo un <code>body</code> o <code>.layout</code> en Grid para la estructura global, y Flexbox dentro de la cabecera o de cada tarjeta.</p>
+        </section>
+
+        <section aria-labelledby="sec-flexbox">
+            <h2 id="sec-flexbox">Flexbox para layouts responsive</h2>
+            <p>El contenedor flex define el eje principal con <code>flex-direction</code> (<code>row</code> o <code>column</code>). En móvil suele ir en columna; en un breakpoint pasas a fila.</p>
+            <pre>.barra {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .barra {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}</pre>
+            <h3>Propiedades que usarás mucho</h3>
+            <ul>
+                <li><code>gap</code>: espacio entre ítems sin márgenes manuales.</li>
+                <li><code>justify-content</code> y <code>align-items</code>: alineación en el eje principal y cruzado.</li>
+                <li><code>flex-wrap: wrap</code>: los ítems pasan a la línea siguiente si no caben.</li>
+                <li><code>flex: 1</code> en un hijo (atajo de <code>flex-grow</code>): ocupa el espacio libre disponible.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-grid">
+            <h2 id="sec-grid">CSS Grid: columnas y áreas</h2>
+            <p>Declaras el contenedor con <code>display: grid</code> y defines pistas con <code>grid-template-columns</code> y, si hace falta, <code>grid-template-rows</code>.</p>
+            <h3>Grilla de tarjetas fluida</h3>
+            <p>Patrón muy habitual: tantas columnas como quepan con un mínimo de ancho:</p>
+            <pre>.lista-tarjetas {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}</pre>
+            <p><code>min(100%, 260px)</code> evita que en viewports muy estrechos una columna “mínima” fuerce scroll horizontal: en pantallas angostas el mínimo efectivo es el 100% del contenedor.</p>
+            <h3>Layout tipo “app”: cabecera, lateral, contenido, pie</h3>
+            <p>Puedes nombrar zonas con <code>grid-template-areas</code> y reasignarlas en un <code>min-width</code> para pasar de una columna (móvil) a planta con sidebar (escritorio):</p>
+            <pre>.app {
+  display: grid;
+  gap: 1rem;
+  min-height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto auto;
+  grid-template-areas:
+    "cabecera"
+    "principal"
+    "lateral"
+    "pie";
+}
+
+@media (min-width: 900px) {
+  .app {
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "cabecera cabecera"
+      "lateral principal"
+      "pie      pie";
+  }
+}
+
+.cabecera { grid-area: cabecera; }
+.lateral  { grid-area: lateral; }
+.principal { grid-area: principal; }
+.pie      { grid-area: pie; }</pre>
+            <p>En este ejemplo el lateral va <strong>debajo del contenido</strong> en móvil; en escritorio salta a la columna izquierda. Si prefieres ocultarlo en pantallas pequeñas, combínalo con los patrones de la Clase 2 (menú hamburguesa, <code>display: none</code> hasta un breakpoint, etc.).</p>
+        </section>
+
+        <section aria-labelledby="sec-patrones">
+            <h2 id="sec-patrones">Más patrones útiles</h2>
+            <ul>
+                <li><strong>Centrado con Flexbox:</strong> <code>display: flex; justify-content: center; align-items: center;</code> en un contenedor de altura definida (por ejemplo un hero).</li>
+                <li><strong>Dos columnas desiguales:</strong> Grid con <code>2fr 1fr</code> o <code>minmax(0, 1fr) minmax(0, 320px)</code> para texto + aside; en móvil una sola columna.</li>
+                <li><strong>auto-fit vs auto-fill:</strong> con <code>auto-fit</code> las columnas vacías se colapsan y el contenido suele estirarse mejor; <code>auto-fill</code> reserva huecos. Para grillas de productos suele preferirse <code>auto-fit</code>.</li>
+            </ul>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo rápido">
+            <strong>Consejo:</strong> si algo “no encoge” en Grid o Flexbox, revisa <code>min-width: auto</code> en hijos (por defecto puede impedir el encogimiento). A veces basta con <code>min-width: 0</code> en el ítem problemático o <code>overflow: hidden</code> en contenedores de texto largo.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Práctica (25–30 min):</p>
+            <ol>
+                <li>Monta una <strong>cabecera</strong> con logo y enlaces: columna en móvil, fila alineada desde <code>min-width: 768px</code> usando Flexbox.</li>
+                <li>Crea una <strong>grilla de al menos 4 tarjetas</strong> con <code>repeat(auto-fit, minmax(...))</code> y comprueba el comportamiento entre 320px y 1200px.</li>
+                <li>Implementa un <strong>layout de página</strong> con Grid y <code>grid-template-areas</code>: al menos cabecera, contenido principal y pie; opcional: barra lateral solo en escritorio.</li>
+            </ol>
+            <p>Usa el modo responsive del navegador y verifica que no haya scroll horizontal ni solapamientos raros al cambiar el zoom al 200%.</p>
+        </section>
+
+        <section aria-labelledby="sec-ruta">
+            <h2 id="sec-ruta">Ruta del módulo (4 clases)</h2>
+            <ul>
+                <li><strong>Clase 1:</strong> qué es el responsive design y para qué sirve; mobile-first; viewport; layout base flexible; media queries con <code>min-width</code>.</li>
+                <li><strong>Clase 2:</strong> breakpoints, componentes y tipografía responsive.</li>
+                <li><strong>Clase 3:</strong> layouts responsive con Grid y Flexbox (patrones reales con estructura).</li>
+                <li><strong>Clase 4:</strong> responsive avanzado: imágenes, QA, accesibilidad y buenas prácticas.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Flexbox" target="_blank" rel="noopener noreferrer">Flexbox (MDN)</a> — Guía y ejemplos.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn/CSS/CSS_layout/Grids" target="_blank" rel="noopener noreferrer">CSS Grid (MDN)</a> — Conceptos y grillas.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/css/layout/" target="_blank" rel="noopener noreferrer">Learn CSS: Layout (web.dev)</a> — Flexbox, Grid y flujo.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 3 – Layouts responsive con Grid y Flexbox</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
