@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 4 – Responsive avanzado: imágenes, QA, accesibilidad y buenas prácticas</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 4 – Responsive avanzado: imágenes, QA, accesibilidad y buenas prácticas</h1>
+    <p class="subtitle">Duración: 35–45 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: responsive avanzado">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Es la última clase del módulo. El responsive no termina en el layout: las <strong>imágenes</strong> deben servirse de forma eficiente y nítida en cada dispositivo, hay que <strong>probar</strong> de verdad lo que publicas y cuidar la <strong>accesibilidad</strong> para que el diseño adaptable siga siendo usable para más personas. Aquí cerramos el ciclo con contenidos y una checklist de buenas prácticas.</p>
+        </section>
+
+        <section aria-labelledby="sec-imagenes">
+            <h2 id="sec-imagenes">Imágenes responsive y rendimiento</h2>
+            <p>Una imagen con <code>width: 800px</code> fija o un archivo enorme descargado en móvil empeora la experiencia y el consumo de datos. Objetivos: <strong>que encaje en el layout</strong> y <strong>que el navegador pida un recurso razonable</strong> según el tamaño en pantalla y la densidad de píxeles.</p>
+            <h3>Base en CSS</h3>
+            <p>Habitual para imágenes de contenido:</p>
+            <pre>img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}</pre>
+            <p>Con <code>object-fit: cover | contain</code> puedes controlar cómo rellena un contenedor con ancho y alto fijos (por ejemplo avatares o banners recortados).</p>
+            <h3><code>srcset</code> y <code>sizes</code></h3>
+            <p>Permiten ofrecer varias resoluciones del mismo recurso; el navegador elige cuál descargar según el espacio y <code>DPR</code> (pantallas retina):</p>
+            <pre>&lt;img
+  src="foto-800.webp"
+  srcset="foto-400.webp 400w, foto-800.webp 800w, foto-1200.webp 1200w"
+  sizes="(min-width: 900px) 50vw, 100vw"
+  alt="Descripción breve y útil"
+  width="800"
+  height="500"
+  loading="lazy"
+  decoding="async"
+/&gt;</pre>
+            <p><code>sizes</code> indica cuánto ancho ocupa la imagen en el layout en distintos contextos; sin eso el navegador no puede optimizar bien la elección. Los atributos <code>width</code> y <code>height</code> reservan espacio y reducen saltos al cargar (<abbr title="Cumulative Layout Shift">CLS</abbr> / estabilidad visual).</p>
+            <h3><code>&lt;picture&gt;</code> y formatos modernos</h3>
+            <p>Sirve para <strong>arte direccional</strong> (recortes distintos en móvil vs escritorio) o para ofrecer <strong>WebP / AVIF</strong> con fallback a JPEG/PNG:</p>
+            <pre>&lt;picture&gt;
+  &lt;source type="image/avif" srcset="hero.avif" /&gt;
+  &lt;source type="image/webp" srcset="hero.webp" /&gt;
+  &lt;img src="hero.jpg" alt="Texto alternativo descriptivo" width="1200" height="630" loading="lazy" /&gt;
+&lt;/picture&gt;</pre>
+            <p><code>loading="lazy"</code> retrasa la carga de imágenes fuera de la primera pantalla; no lo uses en lo que debe verse al instante (por ejemplo la imagen principal visible sin hacer scroll).</p>
+        </section>
+
+        <section aria-labelledby="sec-qa">
+            <h2 id="sec-qa">QA responsive: cómo probar</h2>
+            <p>El modo responsive de las DevTools (Chrome, Firefox, Edge) es imprescindible: prueba anchos como <strong>320px</strong>, <strong>375px</strong>, <strong>768px</strong> y un escritorio ancho, y cambia la orientación.</p>
+            <ul>
+                <li><strong>Scroll horizontal:</strong> no debería aparecer salvo casos muy concretos (tablas complejas, mapas). Si aparece, busca anchos fijos, márgenes que se suman o <code>min-width</code> en hijos.</li>
+                <li><strong>Zoom al 200%</strong> (o más): el texto debe seguir legible y los controles usables; es un criterio de accesibilidad habitual.</li>
+                <li><strong>Red lenta o CPU limitada</strong> en DevTools simula móviles reales y muestra si las imágenes o el JS pesan demasiado.</li>
+                <li><strong>Dispositivo físico</strong> o navegador en el móvil: corrige sensaciones (toque, teclado virtual) que no ves solo en emulación.</li>
+            </ul>
+            <p>Herramientas como <strong>Lighthouse</strong> (pestaña “Lighthouse” o informe en PageSpeed Insights) dan pistas sobre rendimiento, accesibilidad y buenas prácticas; no sustituyen una revisión manual, pero ayudan a priorizar.</p>
+        </section>
+
+        <section aria-labelledby="sec-a11y">
+            <h2 id="sec-a11y">Accesibilidad y responsive</h2>
+            <p>Un diseño adaptable debe seguir siendo operable, no solo “bonito en todos los tamaños”.</p>
+            <ul>
+                <li><strong>Áreas táctiles:</strong> botones y enlaces tocables conviene que tengan <strong>zona activa</strong> amplia (orientativamente al menos unos <strong>44×44px</strong> de CSS, o equivalente con padding). Evita enlaces de una sola línea diminuta.</li>
+                <li><strong>Contraste:</strong> texto y elementos interactivos deben cumplir ratios adecuados frente al fondo (herramientas del inspector o chequeos de Lighthouse).</li>
+                <li><strong>Teclado y foco:</strong> no ocultes <code>:focus</code> sin sustituirlo por un indicador visible; quien navega con Tab debe ver dónde está.</li>
+                <li><strong>Textos alternativos:</strong> las imágenes con significado llevan <code>alt</code> descriptivo; decorativas pueden llevar <code>alt=""</code>.</li>
+                <li><strong>Movimiento reducido:</strong> muchos usuarios activan “reducir animaciones” en el sistema. Puedes respetarlo con <code>@media (prefers-reduced-motion: reduce)</code> para reducir transiciones o animaciones largas.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-cierre">
+            <h2 id="sec-cierre">Buenas prácticas finales</h2>
+            <ul>
+                <li><strong>Mobile-first</strong> como hilo conductor: base móvil y <code>min-width</code> para ampliar (Clase 1).</li>
+                <li><strong>Contenedor y tipografía fluida</strong> antes de mil breakpoints (Clases 1–2).</li>
+                <li><strong>Layout con Flexbox y Grid</strong> donde toque (Clase 3).</li>
+                <li><strong>Imágenes y datos:</strong> formatos adecuados, <code>srcset</code>/<code>picture</code>, lazy load donde proceda, dimensiones explícitas cuando ayuden al CLS.</li>
+                <li><strong>Un solo HTML</strong> coherente; evita duplicar bloques solo para “versión móvil” salvo casos muy justificados.</li>
+            </ul>
+            <p>Con esto tienes una base sólida para seguir profundizando (container queries, diseño multilenguaje con textos largos, etc.) cuando tus proyectos lo pidan.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo rápido">
+            <strong>Consejo:</strong> antes de dar por cerrada una página, recorre un checklist corto: ¿hay scroll horizontal inesperado? ¿Los enlaces y botones son fáciles de pulsar? ¿Las imágenes tienen <code>alt</code> y no pesan de más en móvil? Eso evita muchos fallos que solo aparecen en dispositivo real o con zoom alto.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Práctica (25–35 min):</p>
+            <ol>
+                <li>Toma una página o componente tuyo y convierte al menos una imagen a un patrón con <code>srcset</code> + <code>sizes</code> (o <code>picture</code> con WebP y fallback). Incluye <code>width</code>, <code>height</code> y <code>alt</code> significativo.</li>
+                <li>Pasa una <strong>lista de verificación</strong> en 320px, 768px y 1280px: scroll horizontal, enlaces tocables, legibilidad con zoom 200%.</li>
+                <li>Ejecuta <strong>Lighthouse</strong> sobre la página y anota 2 mejoras concretas (rendimiento o accesibilidad); intenta aplicar al menos una.</li>
+                <li>Opcional: añade una regla con <code>prefers-reduced-motion</code> que suavice o desactive animaciones largas en tu CSS.</li>
+            </ol>
+            <p>Si el módulo fue en orden, repasa cómo encajan las cuatro clases y monta un mini proyecto que use viewport, breakpoints, Grid/Flexbox e imágenes adaptadas en conjunto.</p>
+        </section>
+
+        <section aria-labelledby="sec-ruta">
+            <h2 id="sec-ruta">Ruta del módulo (4 clases)</h2>
+            <ul>
+                <li><strong>Clase 1:</strong> qué es el responsive design y para qué sirve; mobile-first; viewport; layout base flexible; media queries con <code>min-width</code>.</li>
+                <li><strong>Clase 2:</strong> breakpoints, componentes y tipografía responsive.</li>
+                <li><strong>Clase 3:</strong> layouts responsive con Grid y Flexbox (patrones reales con estructura).</li>
+                <li><strong>Clase 4:</strong> responsive avanzado: imágenes, QA, accesibilidad y buenas prácticas.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/HTML/Element/img" target="_blank" rel="noopener noreferrer">&lt;img&gt;: imágenes en HTML (MDN)</a> — <code>srcset</code>, <code>sizes</code>, dimensiones.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/HTML/Element/picture" target="_blank" rel="noopener noreferrer">&lt;picture&gt; (MDN)</a> — Fuentes y formatos múltiples.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/images/" target="_blank" rel="noopener noreferrer">Learn Images (web.dev)</a> — Imágenes adaptativas y rendimiento.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/object-fit" target="_blank" rel="noopener noreferrer">object-fit (MDN)</a> — Recortes y encaje en contenedor.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener noreferrer">prefers-reduced-motion (MDN)</a> — Respetar preferencias de movimiento.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 4 – Responsive avanzado: imágenes, QA, accesibilidad y buenas prácticas</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
