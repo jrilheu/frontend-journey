@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 1 – Git básico: fundamentos y primeros commits (local)</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 1 – Git básico: fundamentos y primeros commits (local)</h1>
+    <p class="subtitle">Duración: 25–35 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: Git básico local">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Este módulo tiene <strong>3 clases</strong> sobre <strong>Git</strong> y <strong>GitHub</strong>. En esta primera sesión trabajamos solo en tu máquina: entender qué es cada herramienta, tener Git instalado y configurado, crear un repositorio y registrar cambios con <strong>commits</strong>. Publicar en GitHub y colaborar con remoto lo verás en las clases siguientes.</p>
+        </section>
+
+        <section aria-labelledby="sec-que-es">
+            <h2 id="sec-que-es">¿Qué es Git y qué es GitHub?</h2>
+            <p><strong>Git</strong> es un sistema de <strong>control de versiones</strong>: guarda el historial de cambios de tus archivos y te permite volver atrás, comparar versiones y trabajar en ramas. Funciona en tu ordenador; no necesitas internet para hacer commits en local.</p>
+            <p><strong>GitHub</strong> es un servicio en la nube (hay otros, como GitLab o Bitbucket) donde puedes <strong>alojar copias</strong> de tus repositorios Git, compartirlos y colaborar. Git es la herramienta; GitHub es un lugar donde usarla con más personas. En la Clase 2 conectarás tu repo local con un remoto en GitHub.</p>
+            <div class="highlight">
+                <strong>Regla mental:</strong> Git versiona carpetas y archivos de un proyecto. Cada “captura” coherente del estado que quieres guardar es un <strong>commit</strong>, con un mensaje que explique qué cambió.
+            </div>
+        </section>
+
+        <section aria-labelledby="sec-instalar">
+            <h2 id="sec-instalar">Instalar Git y comprobar la versión</h2>
+            <p>Si aún no lo tienes, instala Git desde la página oficial (<a class="resource-inline" href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">git-scm.com/downloads</a>) siguiendo el asistente de tu sistema (Windows, macOS o Linux).</p>
+            <p>Abre una terminal y ejecuta:</p>
+            <pre>git --version</pre>
+            <p>Deberías ver algo como <code>git version 2.x.x</code>. Si el comando no se reconoce, revisa que Git esté en el <code>PATH</code> o reinicia la terminal tras instalar.</p>
+        </section>
+
+        <section aria-labelledby="sec-config">
+            <h2 id="sec-config">Configuración inicial (una vez por máquina)</h2>
+            <p>Git asocia cada commit con un nombre y un correo. Configúralos (usa el mismo correo que en GitHub si más adelante vas a subir código):</p>
+            <pre>git config --global user.name "Tu Nombre"
+git config --global user.email "tu@email.com"</pre>
+            <p>Para ver qué quedó guardado:</p>
+            <pre>git config --global --list</pre>
+            <h3>Opcional: nombre de la rama por defecto</h3>
+            <p>Muchos proyectos usan <code>main</code> como rama principal. Puedes fijarlo así:</p>
+            <pre>git config --global init.defaultBranch main</pre>
+        </section>
+
+        <section aria-labelledby="sec-repo">
+            <h2 id="sec-repo">Tu primer repositorio local</h2>
+            <p>Crea una carpeta para practicar (por ejemplo <code>mi-primer-repo</code>), entra en ella y inicializa Git:</p>
+            <pre>mkdir mi-primer-repo
+cd mi-primer-repo
+git init</pre>
+            <p>Git creará una carpeta oculta <code>.git</code> con el historial del repositorio. A partir de aquí esa carpeta es un <strong>repo Git</strong>.</p>
+            <h3>Tres zonas que debes conocer</h3>
+            <ul>
+                <li><strong>Directorio de trabajo:</strong> tus archivos editables en la carpeta del proyecto.</li>
+                <li><strong>Staging (índice):</strong> “escenario” donde eliges qué cambios formarán parte del próximo commit con <code>git add</code>.</li>
+                <li><strong>Historial (commits):</strong> las versiones guardadas en el repositorio con <code>git commit</code>.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-flujo">
+            <h2 id="sec-flujo">El flujo básico: status, add, commit</h2>
+            <p>Crea un archivo de prueba, por ejemplo <code>README.md</code>, guarda contenido y ejecuta:</p>
+            <pre>git status</pre>
+            <p>Verás el archivo como <strong>untracked</strong> o <strong>modified</strong>. Para preparar el commit:</p>
+            <pre>git add README.md</pre>
+            <p>O, para añadir todos los cambios rastreados y nuevos en la carpeta actual (con cuidado en proyectos grandes):</p>
+            <pre>git add .</pre>
+            <p>Registra el snapshot con un mensaje claro:</p>
+            <pre>git commit -m "Añade README inicial"</pre>
+            <p>Consulta el historial:</p>
+            <pre>git log --oneline</pre>
+            <p>Cada línea es un commit con un hash corto y el mensaje. Repite el ciclo: editar → <code>status</code> → <code>add</code> → <code>commit</code>.</p>
+        </section>
+
+        <section aria-labelledby="sec-gitignore">
+            <h2 id="sec-gitignore">Archivos que no quieres versionar: .gitignore</h2>
+            <p>Algunos archivos no deben entrar en Git: dependencias generadas (<code>node_modules</code>), secretos, cachés, binarios pesados. Crea un archivo llamado <code>.gitignore</code> en la raíz del repo y lista patrones (una por línea):</p>
+            <pre>node_modules/
+.env
+*.log</pre>
+            <p>Git dejará de ofrecerte esos archivos para el staging. En proyectos reales suele haber plantillas según el lenguaje o framework.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo rápido">
+            <strong>Consejo:</strong> escribe mensajes de commit en presente o imperativo corto (“Añade login”, “Corrige typo”), como si completaras la frase “Este commit…”. Evita mensajes vacíos como “cambios” o “fix”: en un mes no recordarás qué eran.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Práctica (15–20 min):</p>
+            <ol>
+                <li>Comprueba <code>git --version</code> y tu <code>user.name</code> / <code>user.email</code> con <code>git config --global --list</code>.</li>
+                <li>Carpeta nueva → <code>git init</code> → archivo <code>hola.txt</code> → primer commit con mensaje descriptivo.</li>
+                <li>Edita el archivo, vuelve a hacer <code>status</code>, <code>add</code> y un segundo commit. Revisa el historial con <code>git log --oneline</code>.</li>
+                <li>Opcional: crea <code>.gitignore</code> e ignora un archivo temporal; verifica con <code>git status</code> que no aparece para añadir.</li>
+            </ol>
+            <p>En la <strong>Clase 2</strong> crearás un repositorio en GitHub y conectarás este flujo con <code>remote</code>, <code>push</code> y <code>pull</code>.</p>
+        </section>
+
+        <section aria-labelledby="sec-ruta">
+            <h2 id="sec-ruta">Ruta del módulo (3 clases)</h2>
+            <ul>
+                <li><strong>Clase 1:</strong> Git en local: qué es Git vs GitHub; instalación y configuración; <code>init</code>, staging, commits, <code>log</code>; introducción a <code>.gitignore</code>.</li>
+                <li><strong>Clase 2:</strong> GitHub: cuenta y repositorio remoto; <code>clone</code>; <code>remote</code>, <code>push</code> y <code>pull</code>; flujo básico con origen.</li>
+                <li><strong>Clase 3:</strong> Ramas (<code>branch</code>), fusión (<code>merge</code>), conflictos sencillos y flujo con pull requests.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://git-scm.com/book/es/v2" target="_blank" rel="noopener noreferrer">Pro Git (libro oficial, español)</a> — Referencia profunda; los primeros capítulos cubren lo visto aquí.</li>
+                <li><a class="resource-inline" href="https://docs.github.com/es/get-started/start-your-journey/about-github-and-git" target="_blank" rel="noopener noreferrer">GitHub Docs: Git y GitHub</a> — Relación entre ambos.</li>
+                <li><a class="resource-inline" href="https://education.github.com/git-cheat-sheet-education.pdf" target="_blank" rel="noopener noreferrer">Git cheat sheet (GitHub Education, PDF)</a> — Comandos frecuentes en una página.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 1 – Git básico: fundamentos y primeros commits (local)</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
