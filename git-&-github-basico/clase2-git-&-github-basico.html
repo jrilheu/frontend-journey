@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 2 – GitHub remoto: conectar, subir y traer cambios</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 2 – GitHub remoto: conectar, subir y traer cambios</h1>
+    <p class="subtitle">Duración: 25–35 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: GitHub remoto">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>En la Clase 1 trabajaste Git en local. Ahora vas a conectar ese flujo con <strong>GitHub</strong>: crear un repositorio remoto, enlazarlo desde tu repo local, subir cambios con <code>push</code> y traer cambios con <code>pull</code>. Al terminar, ya tendrás un flujo minimo de sincronizacion.</p>
+        </section>
+
+        <section aria-labelledby="sec-previo">
+            <h2 id="sec-previo">Antes de empezar</h2>
+            <p>Necesitas una cuenta de GitHub y Git instalado. Comprueba en terminal:</p>
+            <pre>git --version</pre>
+            <p>Opcional pero recomendado: autenticarte con GitHub CLI (<code>gh auth login</code>) o tener listo tu metodo HTTPS con token (o SSH) para evitar problemas al hacer push.</p>
+        </section>
+
+        <section aria-labelledby="sec-remoto">
+            <h2 id="sec-remoto">Repositorio remoto en GitHub</h2>
+            <p>Crea un repositorio nuevo en GitHub (vacio, sin README si ya tienes proyecto local). Copia la URL remota que te da GitHub, por ejemplo:</p>
+            <pre>https://github.com/tu-usuario/mi-primer-repo.git</pre>
+            <p>Desde tu proyecto local, enlaza ese remoto con el nombre <code>origin</code>:</p>
+            <pre>git remote add origin https://github.com/tu-usuario/mi-primer-repo.git</pre>
+            <p>Verifica que quedo bien:</p>
+            <pre>git remote -v</pre>
+            <div class="highlight">
+                <strong>Regla mental:</strong> <code>origin</code> es solo un alias (nombre corto) para una URL remota. Puedes tener mas de un remoto, pero el primero casi siempre se llama <code>origin</code>.
+            </div>
+        </section>
+
+        <section aria-labelledby="sec-primer-push">
+            <h2 id="sec-primer-push">Primer push y rama de seguimiento</h2>
+            <p>Si ya tienes commits locales, subelos por primera vez:</p>
+            <pre>git push -u origin main</pre>
+            <p>El flag <code>-u</code> deja configurada la rama local para seguir a <code>origin/main</code>. Desde ese momento, normalmente te bastara con usar:</p>
+            <pre>git push
+git pull</pre>
+            <p>Si tu rama principal se llama <code>master</code>, reemplaza <code>main</code> por <code>master</code> en el comando.</p>
+        </section>
+
+        <section aria-labelledby="sec-clone">
+            <h2 id="sec-clone">Cuando usar clone</h2>
+            <p>Usa <code>git clone</code> cuando el repositorio ya existe en GitHub y quieres bajarlo completo a tu maquina:</p>
+            <pre>git clone https://github.com/tu-usuario/mi-proyecto.git
+cd mi-proyecto</pre>
+            <p><code>clone</code> ya configura el remoto <code>origin</code> automaticamente. En ese caso no necesitas ejecutar <code>git remote add origin ...</code>.</p>
+        </section>
+
+        <section aria-labelledby="sec-ciclo">
+            <h2 id="sec-ciclo">Ciclo diario basico con remoto</h2>
+            <ol>
+                <li><code>git pull</code> para traer cambios remotos recientes.</li>
+                <li>Editas archivos en local.</li>
+                <li><code>git status</code> para revisar el estado.</li>
+                <li><code>git add .</code> (o archivos concretos) para staging.</li>
+                <li><code>git commit --trailer "Made-with: Cursor" -m "mensaje claro"</code>.</li>
+                <li><code>git push</code> para subir al remoto.</li>
+            </ol>
+            <p>Este ciclo evita divergencias grandes y te ayuda a integrar cambios poco a poco.</p>
+        </section>
+
+        <section aria-labelledby="sec-errores">
+            <h2 id="sec-errores">Errores comunes y como reaccionar</h2>
+            <ul>
+                <li><strong>non-fast-forward al hacer push:</strong> alguien subio cambios antes. Haz <code>git pull --rebase</code> (o <code>git pull</code> segun flujo), resuelve conflictos si aparecen y vuelve a <code>git push</code>.</li>
+                <li><strong>remote origin already exists:</strong> ya habias creado ese remoto. Revisa con <code>git remote -v</code>; si hace falta cambiar URL usa <code>git remote set-url origin NUEVA_URL</code>.</li>
+                <li><strong>auth failed:</strong> revisa credenciales/token/SSH y permisos del repo.</li>
+            </ul>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo rápido">
+            <strong>Consejo:</strong> antes de empezar una sesion de trabajo, haz <code>git pull</code>. Antes de cerrar, haz <code>git push</code>. Mantener ciclos cortos reduce conflictos y sorpresas.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Practica (15–20 min):</p>
+            <ol>
+                <li>Crea un repo en GitHub y enlazalo con un repo local usando <code>git remote add origin ...</code>.</li>
+                <li>Sube tu rama principal con <code>git push -u origin main</code>.</li>
+                <li>Haz un cambio pequeño, crea commit y subelo con <code>git push</code>.</li>
+                <li>Haz un cambio desde GitHub (por ejemplo editar README en web) y traelo con <code>git pull</code>.</li>
+            </ol>
+            <p>En la <strong>Clase 3</strong> daras el siguiente paso: ramas, merge, conflictos y flujo con pull request.</p>
+        </section>
+
+        <section aria-labelledby="sec-ruta">
+            <h2 id="sec-ruta">Ruta del módulo (3 clases)</h2>
+            <ul>
+                <li><strong>Clase 1:</strong> Git en local: instalacion, configuracion, <code>init</code>, staging, commits y <code>.gitignore</code>.</li>
+                <li><strong>Clase 2:</strong> GitHub remoto: <code>clone</code>, <code>remote</code>, <code>push</code> y <code>pull</code>.</li>
+                <li><strong>Clase 3:</strong> ramas (<code>branch</code>), fusion (<code>merge</code>), conflictos y flujo con pull requests.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://docs.github.com/es/get-started/start-your-journey/about-github-and-git" target="_blank" rel="noopener noreferrer">GitHub Docs: Git y GitHub</a> — Relacion y flujo general.</li>
+                <li><a class="resource-inline" href="https://docs.github.com/es/repositories/creating-and-managing-repositories/creating-a-new-repository" target="_blank" rel="noopener noreferrer">Crear repositorio en GitHub</a> — Paso a paso en la web.</li>
+                <li><a class="resource-inline" href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener noreferrer">git push (documentacion oficial)</a> — Opciones y comportamiento.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 2 – GitHub remoto: conectar, subir y traer cambios</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
