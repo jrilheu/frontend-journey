@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clase 1 – Accesibilidad web (a11y): fundamentos y HTML semántico</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lexend:wght@300;400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: #0a0e27;
+        --bg-card: #151b3d;
+        --accent-1: #00f5d4;
+        --accent-2: #f15bb5;
+        --accent-3: #fee440;
+        --text-primary: #e8f1f5;
+        --text-secondary: #a8b8c2;
+        --success: #00f5d4;
+        --warning: #fee440;
+    }
+
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    header {
+        text-align: center;
+        padding: 60px 20px 40px;
+        background: linear-gradient(135deg, rgba(0,245,212,0.1) 0%, rgba(241,91,181,0.1) 100%);
+        border-radius: 20px;
+        margin: 20px 20px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.5; }
+    }
+
+    h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        padding: 30px;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border-left: 5px solid var(--accent-1);
+    }
+
+    h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        color: var(--accent-1);
+    }
+
+    h2:first-of-type {
+        margin-top: 0;
+    }
+
+    h3 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.05rem;
+        color: var(--accent-1);
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+
+    p, li {
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.8;
+    }
+
+    ul {
+        margin-bottom: 20px;
+        padding-left: 25px;
+    }
+
+    .highlight {
+        background: rgba(254,228,64,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 4px solid var(--accent-3);
+        color: var(--text-primary);
+    }
+
+    .highlight strong {
+        color: var(--accent-3);
+    }
+
+    code {
+        background: rgba(0,0,0,0.35);
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9em;
+        color: var(--accent-1);
+    }
+
+    kbd {
+        font-family: 'Space Mono', monospace;
+        background: rgba(0,0,0,0.35);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: var(--accent-2);
+    }
+
+    pre {
+        background: rgba(0,0,0,0.3);
+        padding: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--accent-1);
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+    }
+
+    .quiz {
+        margin-top: 25px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(241,91,181,0.1) 0%, rgba(254,228,64,0.1) 100%);
+        border-radius: 15px;
+        border: 2px solid var(--accent-2);
+    }
+
+    .quiz p {
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+
+    button {
+        background: var(--accent-1);
+        color: var(--bg-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-family: 'Lexend', sans-serif;
+        cursor: pointer;
+        margin: 5px 5px 5px 0;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0,245,212,0.4);
+    }
+
+    footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        text-align: left;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: linear-gradient(135deg, rgba(241,91,181,0.08) 0%, rgba(0,245,212,0.08) 100%);
+        border-radius: 20px;
+        margin: 0 20px 20px;
+    }
+    footer .github-block {
+        text-align: right;
+    }
+    footer .github-block a {
+        color: var(--accent-1);
+        text-decoration: none;
+    }
+    footer .github-block a:hover {
+        text-decoration: underline;
+    }
+    footer .github-block .logo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    footer .github-block svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+    }
+
+    .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 25px 0 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-wrap iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .video-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        text-decoration: none;
+        color: var(--accent-1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+    }
+    .video-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: var(--accent-1);
+        box-shadow: 0 4px 15px rgba(0,245,212,0.2);
+    }
+    .video-pill svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .resource-inline {
+        color: var(--accent-1);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resource-inline:hover {
+        text-decoration: underline;
+    }
+    main ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+        color: var(--text-secondary);
+    }
+    main ol li {
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.4rem; }
+        main { padding: 20px; margin: 15px; }
+        header { margin: 15px; }
+        footer { margin: 0 15px 15px; }
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Clase 1 – Accesibilidad web (a11y): fundamentos y HTML semántico</h1>
+    <p class="subtitle">Duración: 25–35 minutos</p>
+</header>
+
+<main>
+    <article aria-label="Contenido de la clase: accesibilidad web básica">
+        <section aria-labelledby="sec-objetivo">
+            <h2 id="sec-objetivo">Objetivo de esta clase</h2>
+            <p>Este módulo tiene <strong>2 clases</strong> sobre <strong>accesibilidad web (a11y)</strong> desde el frontend. En esta primera sesión sentamos bases: qué es la accesibilidad, cómo se relaciona con HTML semántico, estructura de encabezados, texto de enlaces, imágenes con <code>alt</code>, contraste y navegación por teclado. La <strong>Clase 2</strong> profundiza en ARIA cuando hace falta, formularios, patrones útiles y cómo probar.</p>
+        </section>
+
+        <section aria-labelledby="sec-que-es">
+            <h2 id="sec-que-es">Qué es la accesibilidad web</h2>
+            <p>La <strong>accesibilidad web</strong> es el conjunto de prácticas que permiten que más personas usen tu interfaz: personas con discapacidad visual, auditiva, motriz o cognitiva, pero también quien usa solo teclado, pantallas pequeñas, zoom alto o conexiones lentas.</p>
+            <p>No es un “extra” de diseño: es calidad y alcance. En muchos países la accesibilidad digital es <strong>requisito legal</strong> para sitios públicos; en productos privados mejora SEO, mantenimiento y satisfacción de usuario.</p>
+            <div class="highlight">
+                <strong>Regla mental:</strong> si el HTML comunica bien la estructura y el contenido, ya resolviste gran parte del camino. ARIA y CSS refinan, pero no sustituyen un documento semántico coherente.
+            </div>
+        </section>
+
+        <section aria-labelledby="sec-pour">
+            <h2 id="sec-pour">POUR y WCAG (visión rápida)</h2>
+            <p>El modelo <strong>POUR</strong> resume cuatro principios: contenido <strong>P</strong>ercepcible, <strong>O</strong>perable, <strong>U</strong>nderstandible (comprensible) y <strong>R</strong>obusto.</p>
+            <p>Las <strong>WCAG</strong> (Web Content Accessibility Guidelines) son pautas técnicas; lo habitual en proyectos es apuntar a nivel <strong>AA</strong> como referencia. No hace falta memorizar criterios al inicio: si practicas semántica, teclado, contraste y textos alternativos, ya caminas en la dirección correcta.</p>
+        </section>
+
+        <section aria-labelledby="sec-semantica">
+            <h2 id="sec-semantica">HTML semántico y landmarks</h2>
+            <p>Usa elementos con significado: <code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code>, <code>section</code>, <code>article</code>, listas reales (<code>ul</code>/<code>ol</code>), <code>button</code> para acciones y <code>a</code> para navegación.</p>
+            <p>Debe existir un solo <code>&lt;main&gt;</code> por página (salvo casos muy específicos). Las tecnologías de asistencia usan estos landmarks para saltar bloques.</p>
+        </section>
+
+        <section aria-labelledby="sec-headings">
+            <h2 id="sec-headings">Jerarquía de títulos (<code>h1</code>–<code>h6</code>)</h2>
+            <p>Los encabezados crean un índice del documento. No saltes niveles sin motivo (por ejemplo de <code>h1</code> a <code>h4</code>) y no uses títulos solo por tamaño de fuente: el tamaño se ajusta con CSS.</p>
+            <p>Una sola <code>h1</code> por vista es una buena práctica habitual para reflejar el tema principal de la página.</p>
+        </section>
+
+        <section aria-labelledby="sec-enlaces-img">
+            <h2 id="sec-enlaces-img">Enlaces e imágenes</h2>
+            <p>El texto del enlace debe decir <strong>a dónde va</strong> o <strong>qué hace</strong>. Evita “clic aquí” o “leer más” sin contexto.</p>
+            <p>En imágenes con significado, <code>alt</code> describe la intención; si son puramente decorativas, usa <code>alt=""</code> para que el lector de pantalla las ignore.</p>
+        </section>
+
+        <section aria-labelledby="sec-teclado">
+            <h2 id="sec-teclado">Teclado y foco visible</h2>
+            <p>Mucha gente navega sin ratón. Comprueba que todos los controles interactivos reciban foco con <kbd>Tab</kbd> y se activen con <kbd>Enter</kbd> o <kbd>Espacio</kbd> según corresponda.</p>
+            <p>No elimines el <code>:focus</code> del navegador sin sustituirlo por un indicador visible equivalente. Ocultar foco rompe la orientación de quien usa teclado o lectores.</p>
+        </section>
+
+        <section aria-labelledby="sec-contraste-zoom">
+            <h2 id="sec-contraste-zoom">Contraste y zoom</h2>
+            <p>El texto debe leerse con suficiente contraste frente al fondo (herramientas del inspector o extensiones ayudan a medirlo).</p>
+            <p>Prueba tu layout con <strong>zoom al 200&nbsp;%</strong>: el contenido debería seguir usable sin solaparse de forma que impida leer o pulsar.</p>
+        </section>
+
+        <aside class="highlight" role="note" aria-label="Consejo rápido">
+            <strong>Consejo:</strong> reserva una sesión corta solo con teclado (sin ratón) en tu página. Lo que falle ahí suele ser el primer bug de accesibilidad que notan los usuarios reales.
+        </aside>
+
+        <section class="quiz" aria-labelledby="quiz-titulo">
+            <h2 id="quiz-titulo">Comprueba lo aprendido</h2>
+            <p>Práctica (15–20 min):</p>
+            <ol>
+                <li>Marca una página con <code>header</code>, <code>nav</code>, <code>main</code> y <code>footer</code> si aún no lo están.</li>
+                <li>Revisa la jerarquía de <code>h1</code>–<code>h3</code> y corrige saltos o títulos usados solo por estilo.</li>
+                <li>Mejora el texto de dos enlaces genéricos y revisa los <code>alt</code> de tres imágenes.</li>
+                <li>Navega la página solo con teclado y anota un problema de foco o orden.</li>
+            </ol>
+            <p>En la <strong>Clase 2</strong> verás ARIA con mesura, formularios accesibles, patrones como “saltar al contenido” y cómo probar con herramientas.</p>
+        </section>
+
+        <section aria-labelledby="sec-ruta">
+            <h2 id="sec-ruta">Ruta del módulo (2 clases)</h2>
+            <ul>
+                <li><strong>Clase 1:</strong> conceptos POUR/WCAG; HTML semántico; encabezados; enlaces e imágenes; teclado y foco; contraste y zoom.</li>
+                <li><strong>Clase 2:</strong> ARIA cuando hace falta; formularios (<code>label</code>, errores); patrones (skip link, <code>aria-live</code>); movimiento reducido; pruebas básicas.</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="sec-recursos">
+            <h2 id="sec-recursos">Recursos online</h2>
+            <ul>
+                <li><a class="resource-inline" href="https://www.w3.org/WAI/WCAG22/quickref/?versions=2.2" target="_blank" rel="noopener noreferrer">WCAG 2.2 Quick Reference (WAI)</a> — Mapa de criterios.</li>
+                <li><a class="resource-inline" href="https://developer.mozilla.org/es/docs/Learn/Accessibility" target="_blank" rel="noopener noreferrer">Aprende accesibilidad (MDN)</a> — Guía por temas.</li>
+                <li><a class="resource-inline" href="https://web.dev/learn/accessibility/" target="_blank" rel="noopener noreferrer">Learn Accessibility (web.dev)</a> — Curso introductorio.</li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <span>Clase 1 – Accesibilidad web (a11y): fundamentos y HTML semántico</span>
+    <div class="github-block">
+        Perfil de Github
+        <div class="logo-link">
+            <a href="https://github.com/jrilheu" target="_blank" rel="noopener noreferrer" aria-label="GitHub jrilheu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                jrilheu
+            </a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
